@@ -1,24 +1,34 @@
 FROM kasmweb/desktop:1.14.0
 
-RUN \
-  echo "**** install twitch drop miner app image ****" && \
-  wget -P /home/kasm-user/.local/share/icons/ https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/pickaxe.ico && \
-  wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller.zip && \
-  mkdir /home/kasm-user/.local/TwitchDropsMiner && \
-  unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/home/kasm-user/.local/TwitchDropsMiner/TwitchDropsMiner && \
-  chmod +x /home/kasm-user/.local/TwitchDropsMiner/TwitchDropsMiner && \
-  mkdir /home/kasm-user/Desktop && \
-  echo '[Desktop Entry]\nName=Twitch Drops Miner\nComment=AFK mine timed Twitch drops\nExec=/home/kasm-user/.local/TwitchDropsMiner/TwitchDropsMiner\nIcon=/home/kasm-user/.local/share/icons/pickaxe.ico\nTerminal=false\nType=Application\nStartupNotify=true\nCategories=GNOME;GTK;Development;Documentation;\nMimeType=text/plain;' >> /home/kasm-user/Desktop/twitch-drops-miner.desktop && \
-  chmod +x /home/kasm-user/Desktop/twitch-drops-miner.desktop && \
-  ln -s /home/kasm-user/.local/config/settings.json /home/kasm-user/.local/TwitchDropsMiner/settings.json && \
-  ln -s /home/kasm-user/.local/config/cookies.jar /home/kasm-user/.local/TwitchDropsMiner/cookies.jar && \
-  ln -s /home/kasm-user/.local/config/cache /home/kasm-user/.local/TwitchDropsMiner/cache && \
-  # echo '#!/bin/bash\nsleep 10\nnohup sh -c /home/kasm-user/.local/TwitchDropsMiner/TwitchDropsMiner &' >> /home/kasm-user/startup.sh && \
-  # chmod +x /home/kasm-user/startup.sh && \
-  echo "**** cleanup ****" && \
-  rm -rf /tmp/*
+USER root
 
-# CMD ["/usr/bin/bash", "/home/kasm-user/startup.sh"]
+ENV HOME /home/kasm-default-profile
+ENV STARTUPDIR /dockerstartup
+ENV INST_SCRIPTS $STARTUPDIR/install
+WORKDIR $HOME
 
-# ports and volumes
+######### Customize Container Here ###########
+
+COPY ./install.sh $INST_SCRIPTS/install.sh
+RUN bash $INST_SCRIPTS/install.sh
+
+COPY ./custom_startup.sh $STARTUPDIR/custom_startup.sh
+RUN chmod +x $STARTUPDIR/custom_startup.sh
+RUN chmod 755 $STARTUPDIR/custom_startup.sh
+
+# Update the desktop environment to be optimized for a single application
+RUN cp $HOME/.config/xfce4/xfconf/single-application-xfce-perchannel-xml/* $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/
+# RUN cp /usr/share/backgrounds/bg_kasm.png /usr/share/backgrounds/bg_default.png
+RUN apt-get remove -y xfce4-panel
+
+######### End Customizations ###########
+
+RUN chown 1000:0 $HOME
+
+ENV HOME /home/kasm-user
+WORKDIR $HOME
+RUN mkdir -p $HOME && chown -R 1000:0 $HOME
+
+USER 1000
+
 EXPOSE 6901
