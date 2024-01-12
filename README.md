@@ -8,3 +8,5 @@ Most of scripts are based on https://github.com/kasmtech/workspaces-images/blob/
 docker build -t dungfu/twitch-drops-miner:latest .
 docker push dungfu/twitch-drops-miner:latest
 ```
+
+WebUI username is kasm_user
