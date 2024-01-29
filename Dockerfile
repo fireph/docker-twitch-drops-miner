@@ -1,34 +1,35 @@
-FROM kasmweb/desktop:1.14.0
+# Pull base image.
+FROM jlesage/baseimage-gui:ubuntu-22.04-v4
 
-USER root
+MAINTAINER fireph
 
-ENV HOME /home/kasm-default-profile
-ENV STARTUPDIR /dockerstartup
-ENV INST_SCRIPTS $STARTUPDIR/install
-WORKDIR $HOME
+# Environment
+ENV LANG=en_US.UTF-8
+ENV TDM_VERSION_TAG 8bc62dc
+ENV APP_ICON_URL https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
-######### Customize Container Here ###########
+# Install Twitch Drops Miner
+RUN apt-get update
+RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en
+RUN wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller.zip
+RUN mkdir /TwitchDropsMiner
+RUN unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
+RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
+RUN rm -rf /tmp
 
-COPY ./install.sh $INST_SCRIPTS/install.sh
-RUN bash $INST_SCRIPTS/install.sh
+# Link config folder files
+RUN mkdir /TwitchDropsMiner/config
+RUN ln -s /TwitchDropsMiner/config/settings.json /TwitchDropsMiner/settings.json
+RUN ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar
 
-COPY ./custom_startup.sh $STARTUPDIR/custom_startup.sh
-RUN chmod +x $STARTUPDIR/custom_startup.sh
-RUN chmod 755 $STARTUPDIR/custom_startup.sh
+# Make sure permissions are gonna work
+RUN chmod -R 777 /TwitchDropsMiner
 
-# Update the desktop environment to be optimized for a single application
-RUN cp $HOME/.config/xfce4/xfconf/single-application-xfce-perchannel-xml/* $HOME/.config/xfce4/xfconf/xfce-perchannel-xml/
-# RUN cp /usr/share/backgrounds/bg_kasm.png /usr/share/backgrounds/bg_default.png
-RUN apt-get remove -y xfce4-panel
+# Copy the start script.
+COPY startapp.sh /startapp.sh
 
-######### End Customizations ###########
+# Generate and install favicons
+RUN install_app_icon.sh "$APP_ICON_URL"
 
-RUN chown 1000:0 $HOME
-
-ENV HOME /home/kasm-user
-WORKDIR $HOME
-RUN mkdir -p $HOME && chown -R 1000:0 $HOME
-
-USER 1000
-
-EXPOSE 6901
+# Set the name of the application.
+RUN set-cont-env APP_NAME "Twitch Drops Miner"
