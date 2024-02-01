@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - "dockerimage-main.yml"
+      - ".github/workflows/dockerimage-main.yml"
       - "Dockerfile"
       - "startapp.sh"
 
