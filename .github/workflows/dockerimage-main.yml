@@ -1,0 +1,28 @@
+name: Dockerimage Main
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - "dockerimage-main.yml"
+      - "Dockerfile"
+      - "startapp.sh"
+
+jobs:
+  handbrake:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        ref: 'main'
+    - name: Build the Docker image
+      env:
+        HUB_NAME: ${{ secrets.DOCKER_NAME }}
+        HUB_KEY: ${{ secrets.DOCKER_TOKEN }}
+      run: |
+        docker login -u $HUB_NAME -p $HUB_KEY
+        docker build . --pull --no-cache --file Dockerfile --tag dungfu/twitch-drops-miner:latest
+
+        docker push dungfu/twitch-drops-miner:latest
