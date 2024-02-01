@@ -10,7 +10,7 @@ on:
       - "startapp.sh"
 
 jobs:
-  handbrake:
+  twitch-drops-miner:
     runs-on: ubuntu-latest
 
     steps:
