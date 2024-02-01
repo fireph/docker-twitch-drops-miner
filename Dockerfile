@@ -29,6 +29,7 @@ RUN chmod -R 777 /TwitchDropsMiner
 
 # Copy the start script.
 COPY startapp.sh /startapp.sh
+RUN chmod +x /startapp.sh
 
 # Generate and install favicons
 RUN install_app_icon.sh "$APP_ICON_URL"
