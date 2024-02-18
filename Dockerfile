@@ -15,7 +15,7 @@ RUN install-glibc
 
 # Install Twitch Drops Miner
 RUN apk update
-RUN apk --no-cache add wget unzip libc6-compat libayatana-appindicator font-noto-emoji musl-locales musl-locales-lang
+RUN apk --no-cache add wget unzip libc6-compat zlib libayatana-appindicator font-noto-emoji musl-locales musl-locales-lang
 RUN wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller.zip
 RUN mkdir /TwitchDropsMiner
 RUN unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
