@@ -1,5 +1,5 @@
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.19-v4
+FROM jlesage/baseimage-gui:ubuntu-22.04-v4
 
 MAINTAINER fireph
 
@@ -10,12 +10,9 @@ ENV KEEP_APP_RUNNING=1
 ENV TDM_VERSION_TAG a536dde
 ENV APP_ICON_URL https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
-# Install glibc
-RUN install-glibc
-
 # Install Twitch Drops Miner
-RUN apk update
-RUN add-pkg wget unzip libayatana-appindicator font-noto-emoji musl-locales musl-locales-lang
+RUN apt-get update
+RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en fonts-noto-color-emoji
 RUN wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller.zip
 RUN mkdir /TwitchDropsMiner
 RUN unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
