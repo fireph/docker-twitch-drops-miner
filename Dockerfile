@@ -7,7 +7,7 @@ MAINTAINER fireph
 ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG v15.8.1
+ENV TDM_VERSION_TAG 15.8.1
 ENV APP_ICON_URL https://raw.githubusercontent.com/Windows200000/TwitchDropsMiner-updated/master/appimage/pickaxe.png
 
 # Install Twitch Drops Miner
