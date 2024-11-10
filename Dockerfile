@@ -1,5 +1,5 @@
 # Pull base image.
-FROM jlesage/baseimage-gui:ubuntu-22.04-v4
+FROM jlesage/baseimage-gui:alpine-3.20-v4
 
 MAINTAINER fireph
 
@@ -7,15 +7,17 @@ MAINTAINER fireph
 ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG 15.9.0
-ENV APP_ICON_URL https://raw.githubusercontent.com/Windows200000/TwitchDropsMiner-updated/master/appimage/pickaxe.png
+ENV TDM_VERSION_TAG 0.3.3
+ENV APP_ICON_URL https://raw.githubusercontent.com/fireph/TwitchDropsMiner-updated/master/appimage/pickaxe.png
 
 # Install Twitch Drops Miner
-RUN apt-get update -y
-RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en fonts-noto-color-emoji
-RUN wget -P /tmp/ https://github.com/Windows200000/TwitchDropsMiner-updated/releases/download/v15.9.0/Twitch.Drops.Miner.Linux.PyInstaller.zip
+# RUN apt-get update -y
+# RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en fonts-noto-color-emoji
+RUN add-pkg wget
+RUN add-pkg font-noto-emoji
+RUN wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner-updated/releases/download/v0.3.3/TwitchDropsMiner-linux-musl.tar.gz
 RUN mkdir /TwitchDropsMiner
-RUN unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
+RUN tar -zxvf /tmp/TwitchDropsMiner-linux-musl.tar.gz "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
 RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
 RUN rm -rf /tmp
 
