@@ -23,6 +23,6 @@ jobs:
         HUB_KEY: ${{ secrets.DOCKER_TOKEN }}
       run: |
         docker login -u $HUB_NAME -p $HUB_KEY
-        docker build . --pull --no-cache --tag dungfu/twitch-drops-miner:latest
+        docker build . --pull --no-cache --tag dungfu/twitch-drops-miner:alpine
 
-        docker push dungfu/twitch-drops-miner:latest
+        docker push dungfu/twitch-drops-miner:alpine
