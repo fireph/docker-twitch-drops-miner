@@ -8,3 +8,5 @@ docker push dungfu/twitch-drops-miner:latest
 ```
 
 Don't forget to mount `/TwitchDropsMiner/config` to have data persistence.
+
+Available at: https://hub.docker.com/r/dungfu/twitch-drops-miner
