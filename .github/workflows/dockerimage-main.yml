@@ -14,17 +14,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-      with:
-        ref: 'main'
-    - name: Build the Docker image
-      with:
-        platforms: linux/amd64
-      env:
-        HUB_NAME: ${{ secrets.DOCKER_NAME }}
-        HUB_KEY: ${{ secrets.DOCKER_TOKEN }}
-      run: |
-        docker login -u $HUB_NAME -p $HUB_KEY
-        docker build . --pull --no-cache --tag dungfu/twitch-drops-miner:alpine
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
 
-        docker push dungfu/twitch-drops-miner:alpine
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKER_NAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: dungfu/twitch-drops-miner:alpine
+          pull: true
+          no-cache: true
