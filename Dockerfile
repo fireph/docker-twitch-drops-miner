@@ -1,23 +1,55 @@
 # Pull base image.
-FROM jlesage/baseimage-gui:ubuntu-22.04-v4
+FROM jlesage/baseimage-gui:alpine-3.20-v4
 
 LABEL org.opencontainers.image.authors="fireph"
 
+# Add architecture detection
+ARG TARGETARCH
+ARG TARGETVARIANT
+
 # Environment
-ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG=15.9.1
-ENV APP_ICON_URL=https://raw.githubusercontent.com/Windows200000/TwitchDropsMiner-updated/master/appimage/pickaxe.png
+ENV TDM_VERSION_TAG=0.3.11
+ENV APP_ICON_URL=https://raw.githubusercontent.com/fireph/TwitchDropsMiner-updated/master/appimage/pickaxe.png
 
-# Install Twitch Drops Miner
-RUN apt-get update -y
-RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en fonts-noto-color-emoji
-RUN wget -P /tmp/ https://github.com/Windows200000/TwitchDropsMiner-updated/releases/download/v15.9.1/Twitch.Drops.Miner.Linux.PyInstaller.zip
-RUN mkdir /TwitchDropsMiner
-RUN unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
-RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
-RUN rm -rf /tmp
+# Update locale to en_US.UTF-8 since it defaults to POSIX
+RUN \
+    add-pkg locales && \
+    sed-patch 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+ENV LANG=en_US.UTF-8
+
+# Install dependencies
+RUN add-pkg wget \
+    jpeg \
+    zlib \
+    freetype \
+    lcms2 \
+    openjpeg \
+    tiff \
+    tk \
+    tcl \
+    font-noto \
+    font-noto-emoji \
+    fontconfig \
+    libx11 \
+    libxrender
+
+# Download and install the correct binary based on architecture
+RUN case "${TARGETARCH}${TARGETVARIANT}" in \
+        "amd64")  BINARY_SUFFIX="-amd64" ;; \
+        "arm64")  BINARY_SUFFIX="-arm64" ;; \
+        "armv7")  BINARY_SUFFIX="-armv7" ;; \
+        *)        echo "Unsupported architecture: ${TARGETARCH}${TARGETVARIANT}" && exit 1 ;; \
+    esac && \
+    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner-updated/releases/download/v${TDM_VERSION_TAG}/TwitchDropsMiner-linux-musl${BINARY_SUFFIX}.tar.gz && \
+    mkdir /TwitchDropsMiner && \
+    cd /tmp && \
+    tar -zxvf TwitchDropsMiner-linux-musl${BINARY_SUFFIX}.tar.gz && \
+    mv "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" /TwitchDropsMiner/TwitchDropsMiner && \
+    chmod +x /TwitchDropsMiner/TwitchDropsMiner && \
+    rm -rf /tmp
 
 # Link config folder files
 RUN mkdir /TwitchDropsMiner/config
