@@ -51,6 +51,9 @@ RUN case "${TARGETARCH}${TARGETVARIANT}" in \
 RUN ln -s /config /TwitchDropsMiner/config
 RUN ln -s /cache /TwitchDropsMiner/cache
 
+# Make sure permissions are gonna work
+RUN chmod -R 777 /TwitchDropsMiner
+
 # Copy the start script
 COPY startapp.sh /startapp.sh
 RUN chmod +x /startapp.sh
