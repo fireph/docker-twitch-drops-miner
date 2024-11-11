@@ -11,7 +11,7 @@ ARG TARGETVARIANT
 ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG=0.3.11
+ENV TDM_VERSION_TAG=0.4.3
 ENV APP_ICON_URL=https://raw.githubusercontent.com/fireph/TwitchDropsMiner-updated/master/appimage/pickaxe.png
 
 # Install dependencies
@@ -35,6 +35,8 @@ RUN case "${TARGETARCH}${TARGETVARIANT}" in \
         "amd64")  BINARY_SUFFIX="-amd64" ;; \
         "arm64")  BINARY_SUFFIX="-arm64" ;; \
         "armv7")  BINARY_SUFFIX="-armv7" ;; \
+        "armv6")  BINARY_SUFFIX="-armv6" ;; \
+        "386")  BINARY_SUFFIX="-386" ;; \
         *)        echo "Unsupported architecture: ${TARGETARCH}${TARGETVARIANT}" && exit 1 ;; \
     esac && \
     wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner-updated/releases/download/v${TDM_VERSION_TAG}/TwitchDropsMiner-linux-musl${BINARY_SUFFIX}.tar.gz && \
