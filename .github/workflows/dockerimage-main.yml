@@ -33,6 +33,6 @@ jobs:
         with:
           context: .
           push: true
-          tags: dungfu/twitch-drops-miner:alpine
+          tags: dungfu/twitch-drops-miner:latest
           pull: true
           no-cache: true
