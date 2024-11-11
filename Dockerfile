@@ -11,7 +11,7 @@ ARG TARGETVARIANT
 ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG=0.4.3
+ENV TDM_VERSION_TAG=0.4.4
 ENV APP_ICON_URL=https://raw.githubusercontent.com/fireph/TwitchDropsMiner-updated/master/appimage/pickaxe.png
 
 # Install dependencies
@@ -47,13 +47,9 @@ RUN case "${TARGETARCH}${TARGETVARIANT}" in \
     chmod +x /TwitchDropsMiner/TwitchDropsMiner && \
     rm -rf /tmp
 
-# Link config folder files
-RUN mkdir /TwitchDropsMiner/config
-RUN ln -s /TwitchDropsMiner/config/settings.json /TwitchDropsMiner/settings.json
-RUN ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar
-
-# Make sure permissions are gonna work
-RUN chmod -R 777 /TwitchDropsMiner
+# Link config/cache folders
+RUN ln -s /config /TwitchDropsMiner/config
+RUN ln -s /cache /TwitchDropsMiner/cache
 
 # Copy the start script
 COPY startapp.sh /startapp.sh
