@@ -1,2 +1,3 @@
 #!/bin/sh
-exec /TwitchDropsMiner/TwitchDropsMiner
+cd /TwitchDropsMiner
+./TwitchDropsMiner
