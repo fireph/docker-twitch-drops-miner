@@ -18,6 +18,8 @@ jobs:
       with:
         ref: 'main'
     - name: Build the Docker image
+      with:
+        platforms: linux/amd64
       env:
         HUB_NAME: ${{ secrets.DOCKER_NAME }}
         HUB_KEY: ${{ secrets.DOCKER_TOKEN }}
