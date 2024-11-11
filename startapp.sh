@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /TwitchDropsMiner/TwitchDropsMiner
+exec env /TwitchDropsMiner/TwitchDropsMiner "$@"
