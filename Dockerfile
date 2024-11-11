@@ -7,7 +7,7 @@ MAINTAINER fireph
 ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG 0.3.4
+ENV TDM_VERSION_TAG 0.3.5
 ENV APP_ICON_URL https://raw.githubusercontent.com/fireph/TwitchDropsMiner-updated/master/appimage/pickaxe.png
 
 # Install Twitch Drops Miner
@@ -15,7 +15,7 @@ ENV APP_ICON_URL https://raw.githubusercontent.com/fireph/TwitchDropsMiner-updat
 # RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en fonts-noto-color-emoji
 RUN add-pkg wget
 RUN add-pkg font-noto-emoji
-RUN wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner-updated/releases/download/v0.3.4/TwitchDropsMiner-linux-musl.tar.gz
+RUN wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner-updated/releases/download/v0.3.5/TwitchDropsMiner-linux-musl.tar.gz
 RUN mkdir /TwitchDropsMiner
 RUN tar -zxvf /tmp/TwitchDropsMiner-linux-musl.tar.gz "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
 RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
