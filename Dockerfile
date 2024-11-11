@@ -8,17 +8,11 @@ ARG TARGETARCH
 ARG TARGETVARIANT
 
 # Environment
+ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
 ENV TDM_VERSION_TAG=0.3.11
 ENV APP_ICON_URL=https://raw.githubusercontent.com/fireph/TwitchDropsMiner-updated/master/appimage/pickaxe.png
-
-# Update locale to en_US.UTF-8 since it defaults to POSIX
-RUN \
-    add-pkg locales && \
-    sed-patch 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen
-ENV LANG=en_US.UTF-8
 
 # Install dependencies
 RUN add-pkg wget \
