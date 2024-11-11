@@ -19,9 +19,6 @@ RUN add-pkg wget \
     jpeg \
     zlib \
     freetype \
-    lcms2 \
-    openjpeg \
-    tiff \
     tk \
     tcl \
     font-noto \
