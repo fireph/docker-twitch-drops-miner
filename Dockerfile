@@ -11,7 +11,7 @@ ARG TARGETVARIANT
 ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG=0.4.4
+ENV TDM_VERSION_TAG=0.5.0
 ENV APP_ICON_URL=https://raw.githubusercontent.com/fireph/TwitchDropsMiner-updated/master/appimage/pickaxe.png
 
 # Install dependencies
