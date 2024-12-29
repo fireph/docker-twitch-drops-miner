@@ -22,7 +22,10 @@ twitch-drops-miner:
     - "5800:5800/tcp"
   volumes:
    - /usr/me/tdm/config:/config
+   - /usr/me/tdm/cache:/cache
   environment:
     - USER_ID=568
     - GROUP_ID=568
 ```
+
+See [Environment Variables](https://github.com/jlesage/docker-baseimage-gui?tab=readme-ov-file#environment-variables) for a list of all the supported ones.
