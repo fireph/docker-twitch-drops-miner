@@ -1,5 +1,5 @@
 # Pull base image.
-FROM jlesage/baseimage-gui:alpine-3.20-v4
+FROM jlesage/baseimage-gui:alpine-3.21-v4
 
 LABEL org.opencontainers.image.authors="fireph"
 
