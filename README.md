@@ -12,3 +12,17 @@ Don't forget to mount `/config` to have data persistence.
 You can also mount `/cache` to preserve cached images and mappings.
 
 Available at: https://hub.docker.com/r/dungfu/twitch-drops-miner
+
+Example Docker Compose:
+
+```yaml
+twitch-drops-miner:
+  image: dungfu/twitch-drops-miner
+  ports:
+    - "5800:5800/tcp"
+  volumes:
+   - /usr/me/tdm/config:/config
+  environment:
+    - USER_ID=568
+    - GROUP_ID=568
+```
