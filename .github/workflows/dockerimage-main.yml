@@ -1,6 +1,8 @@
 name: Dockerimage Main
 
 on:
+  schedule:
+    - cron: '37 22 * * *'
   push:
     branches:
       - main
@@ -31,12 +33,20 @@ jobs:
           username: ${{ secrets.DOCKER_NAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
+      - name: Fetch version tags
+        id: fetch_tags
+        run: |
+          TDM_VERSION_TAG=$(curl -s https://api.github.com/repos/fireph/TwitchDropsMiner-Alpine/releases/latest | grep -oP '(?<="tag_name": ")[^"]*')
+          echo "TDM_VERSION_TAG=${TDM_VERSION_TAG}" >> $GITHUB_ENV
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64,linux/arm/v7,linux/arm/v6,linux/386
+          platforms: linux/amd64,linux/arm64,linux/386
           push: true
           tags: dungfu/twitch-drops-miner:latest
+          build-args: |
+            TDM_VERSION_TAG=${{ env.TDM_VERSION_TAG }}
           pull: true
           no-cache: true
