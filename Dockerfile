@@ -6,6 +6,7 @@ LABEL org.opencontainers.image.authors="fireph"
 # Add architecture detection
 ARG TARGETARCH
 ARG TARGETVARIANT
+ARG TDM_VERSION_TAG
 
 # Environment
 ENV LANG=en_US.UTF-8
