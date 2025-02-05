@@ -36,7 +36,8 @@ jobs:
       - name: Fetch version tags
         id: fetch_tags
         run: |
-          TDM_VERSION_TAG=$(curl -s https://api.github.com/repos/fireph/TwitchDropsMiner-Alpine/releases/latest | grep -oP '(?<="tag_name": ")[^"]*')
+          TDM_VERSION_TAG_V=$(curl -s https://api.github.com/repos/fireph/TwitchDropsMiner-Alpine/releases/latest | grep -oP '(?<="tag_name": ")[^"]*')
+          TDM_VERSION_TAG="${TDM_VERSION_TAG_V#v}"
           echo "TDM_VERSION_TAG=${TDM_VERSION_TAG}" >> $GITHUB_ENV
 
       - name: Build and push
