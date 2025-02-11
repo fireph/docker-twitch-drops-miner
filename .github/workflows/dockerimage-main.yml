@@ -43,7 +43,7 @@ jobs:
 
           # Filter to only tags like "alpine-3.21-v4" or "alpine-3.19-v4", etc.
           # (Adjust the grep/sed if you need stricter matching.)
-          filtered=$(echo "$tags" | grep -E '^alpine-[0-9]+\.[0-9]+-v[0-9]')
+          filtered=$(echo "$tags" | grep -E '^alpine-[0-9]+\.[0-9]+-v[0-9]$')
 
           # Strip the "alpine-" prefix so we have strings like "3.21-v4",
           # then sort them in version order.  "sort -V" handles multi-part
@@ -105,7 +105,7 @@ jobs:
           push: true
           tags: dungfu/twitch-drops-miner:latest
           build-args: |
-            BASE_TAG="${{ steps.get_highest_tag.outputs.highest_tag }}"
+            BASE_TAG=${{ steps.get_highest_tag.outputs.highest_tag }}
             TDM_VERSION_TAG=${{ env.TDM_VERSION_TAG }}
           pull: true
           no-cache: true
