@@ -28,6 +28,7 @@ ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/mast
 # Only install runtime dependencies
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
+    ca-certificates \
     libc6 \
     gir1.2-appindicator3-0.1 \
     fonts-noto-color-emoji \
