@@ -10,11 +10,19 @@ ENV KEEP_APP_RUNNING=1
 ENV TDM_VERSION_TAG=v16.dev.2737936
 ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
-# Install Twitch Drops Miner
-RUN apt-get update -y
-RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en fonts-noto-color-emoji
+# Install Twitch Drops Miner dependencies
+RUN apt-get update -y && \
+    apt-get install -y --no-install-recommends \
+    wget \
+    unzip \
+    libc6 \
+    gir1.2-appindicator3-0.1 \
+    language-pack-en \
+    fonts-noto-color-emoji && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
 
-# Set architecture-specific variables
+# Set architecture-specific variables and download Twitch Drops Miner
 ARG TARGETARCH
 RUN case ${TARGETARCH} in \
       "amd64") ARCH_SUFFIX="x86_64" ;; \
@@ -24,8 +32,8 @@ RUN case ${TARGETARCH} in \
     wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip && \
     mkdir /TwitchDropsMiner && \
     unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner && \
-    rm -f /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip
-RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
+    rm -f /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip && \
+    chmod +x /TwitchDropsMiner/TwitchDropsMiner
 
 # Make sure permissions are gonna work
 RUN chmod -R 777 /TwitchDropsMiner
