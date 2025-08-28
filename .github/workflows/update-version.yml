@@ -45,13 +45,15 @@ jobs:
       - name: Update Dockerfile if version changed
         id: update-dockerfile
         run: |
-          new_version="${{ steps.get-release.outputs.commit_hash }}"
+          commit_hash="${{ steps.get-release.outputs.commit_hash }}"
+          new_version="v16.dev.$commit_hash"
           current_version="${{ steps.current-version.outputs.current_version }}"
 
           if [ "$new_version" != "$current_version" ]; then
             echo "Version changed from $current_version to $new_version"
             sed -i "s/ENV TDM_VERSION_TAG=.*/ENV TDM_VERSION_TAG=$new_version/" Dockerfile
             echo "changed=true" >> $GITHUB_OUTPUT
+            echo "new_version=$new_version" >> $GITHUB_OUTPUT
           else
             echo "Version unchanged: $current_version"
             echo "changed=false" >> $GITHUB_OUTPUT
@@ -63,7 +65,7 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add Dockerfile
-          git commit -m "Update TDM_VERSION_TAG to ${{ steps.get-release.outputs.commit_hash }}"
+          git commit -m "Update TDM_VERSION_TAG to ${{ steps.update-dockerfile.outputs.new_version }}"
           git push
 
       - name: Trigger docker build
