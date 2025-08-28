@@ -9,6 +9,8 @@ docker push dungfu/twitch-drops-miner:latest
 
 Don't forget to mount `/TwitchDropsMiner/settings.json` and `/TwitchDropsMiner/cookies.jar` to have data persistence.
 
+You can also mount `/TwitchDropsMiner/cache` if you want persistence of the cache folder.
+
 Available at: https://hub.docker.com/r/dungfu/twitch-drops-miner
 
 Example Docker Compose:
@@ -21,6 +23,7 @@ twitch-drops-miner:
   volumes:
    - /usr/me/tdm/settings.json:/TwitchDropsMiner/settings.json
    - /usr/me/tdm/cookies.jar:/TwitchDropsMiner/cookies.jar
+   - /usr/me/tdm/cache:/TwitchDropsMiner/cache
   environment:
     - USER_ID=568
     - GROUP_ID=568
