@@ -1,8 +1,8 @@
+<div align="center">
+
 # Docker Twitch Drops Miner
 
 A Docker container for automatically mining Twitch drops with a web-based GUI interface.
-
-<div align="center">
 
 [![Docker Hub](https://img.shields.io/docker/pulls/dungfu/twitch-drops-miner)](https://hub.docker.com/r/dungfu/twitch-drops-miner)
 ![Docker Stars](https://img.shields.io/docker/stars/dungfu/twitch-drops-miner?style=flat-square)
