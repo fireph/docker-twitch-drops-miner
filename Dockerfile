@@ -28,8 +28,10 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
     libc6 \
     gir1.2-appindicator3-0.1 \
-    language-pack-en \
-    fonts-noto-color-emoji && \
+    fonts-noto-color-emoji \
+    locales && \
+    locale-gen "en_US.UTF-8" && \
+    update-locale LANG=en_US.UTF-8 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
 
