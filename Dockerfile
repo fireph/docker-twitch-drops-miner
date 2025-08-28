@@ -13,9 +13,17 @@ ENV APP_ICON_URL https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/mast
 # Install Twitch Drops Miner
 RUN apt-get update -y
 RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en fonts-noto-color-emoji
-RUN wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller-x86_64.zip
-RUN mkdir /TwitchDropsMiner
-RUN unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller-x86_64.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
+
+# Set architecture-specific variables
+ARG TARGETARCH
+RUN case ${TARGETARCH} in \
+      "amd64") ARCH_SUFFIX="x86_64" ;; \
+      "arm64") ARCH_SUFFIX="aarch64" ;; \
+      *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip && \
+    mkdir /TwitchDropsMiner && \
+    unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
 RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
 RUN rm -rf /tmp
 
