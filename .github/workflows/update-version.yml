@@ -1,0 +1,79 @@
+name: Update TDM Version Tag
+
+on:
+  schedule:
+    - cron: '19 8 * * *'
+  workflow_dispatch:
+
+jobs:
+  update-version:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: 'main'
+
+      - name: Get latest dev-build release
+        id: get-release
+        run: |
+          # Get the latest dev-build release info
+          release_info=$(curl -s "https://api.github.com/repos/DevilXD/TwitchDropsMiner/releases/tags/dev-build")
+          
+          # Extract commit hash from "Reference commit: xxxxx" in body
+          commit_hash=$(echo "$release_info" | jq -r '.body' | grep -o 'Reference commit: [a-f0-9]+' | cut -d' ' -f3)
+          
+          if [ -z "$commit_hash" ]; then
+            echo "Could not extract commit hash from release body"
+            exit 1
+          fi
+          
+          # Take first 7 characters of commit hash
+          short_commit=${commit_hash:0:7}
+          
+          echo "commit_hash=$short_commit" >> $GITHUB_OUTPUT
+          echo "Found commit hash: $short_commit"
+
+      - name: Check current version in Dockerfile
+        id: current-version
+        run: |
+          current_version=$(grep "ENV TDM_VERSION_TAG=" Dockerfile | cut -d'=' -f2)
+          echo "current_version=$current_version" >> $GITHUB_OUTPUT
+          echo "Current version: $current_version"
+
+      - name: Update Dockerfile if version changed
+        id: update-dockerfile
+        run: |
+          new_version="${{ steps.get-release.outputs.commit_hash }}"
+          current_version="${{ steps.current-version.outputs.current_version }}"
+          
+          if [ "$new_version" != "$current_version" ]; then
+            echo "Version changed from $current_version to $new_version"
+            sed -i "s/ENV TDM_VERSION_TAG=.*/ENV TDM_VERSION_TAG=$new_version/" Dockerfile
+            echo "changed=true" >> $GITHUB_OUTPUT
+          else
+            echo "Version unchanged: $current_version"
+            echo "changed=false" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Commit changes
+        if: steps.update-dockerfile.outputs.changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add Dockerfile
+          git commit -m "Update TDM_VERSION_TAG to ${{ steps.get-release.outputs.commit_hash }}"
+          git push
+
+      - name: Trigger docker build
+        if: steps.update-dockerfile.outputs.changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'dockerimage-main.yml',
+              ref: 'main'
+            });
