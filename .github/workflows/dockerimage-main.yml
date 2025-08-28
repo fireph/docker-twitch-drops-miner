@@ -34,85 +34,12 @@ jobs:
           username: ${{ secrets.DOCKER_NAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Find highest Alpine + vX tag
-        id: get_highest_tag
-        run: |
-          # Get all tags from Docker Hub (first page, up to 100).
-          response="$(curl -s "https://registry.hub.docker.com/v2/repositories/jlesage/baseimage-gui/tags/?page_size=100")"
-          tags=$(echo "$response" | jq -r '.results[].name')
-
-          # Filter to only tags like "alpine-3.21-v4" or "alpine-3.19-v4", etc.
-          # (Adjust the grep/sed if you need stricter matching.)
-          filtered=$(echo "$tags" | grep -E '^alpine-[0-9]+\.[0-9]+-v[0-9]$')
-
-          # Strip the "alpine-" prefix so we have strings like "3.21-v4",
-          # then sort them in version order.  "sort -V" handles multi-part
-          # versions properly.
-          sorted=$(echo "$filtered" \
-            | sed 's/^alpine-//' \
-            | sort -V
-          )
-
-          # The highest (last) after version sorting is what we want.
-          highest=$(echo "$sorted" | tail -n 1)
-
-          highest_tag="alpine-${highest}"
-          echo "Highest tag found: $highest_tag"
-
-          echo "highest_tag=$highest_tag" >> $GITHUB_OUTPUT
-
-      - name: Fetch version tags
-        id: fetch_tags
-        run: |
-          TDM_VERSION_TAG_V=$(curl -s https://api.github.com/repos/fireph/TwitchDropsMiner-Alpine/releases/latest | grep -oP '(?<="tag_name": ")[^"]*')
-          TDM_VERSION_TAG="${TDM_VERSION_TAG_V#v}"
-          echo "TDM_VERSION_TAG=${TDM_VERSION_TAG}" >> $GITHUB_ENV
-
-      - name: Fetch baseimage digest
-        id: fetch_digest
-        run: |
-          docker pull jlesage/baseimage-gui:${{ steps.get_highest_tag.outputs.highest_tag }} 2>/dev/null
-          BASE_IMAGE_DIGEST=$(docker inspect --format='{{.Id}}' jlesage/baseimage-gui:${{ steps.get_highest_tag.outputs.highest_tag }})
-
-          echo "BASE_IMAGE_DIGEST=${BASE_IMAGE_DIGEST}" >> $GITHUB_ENV
-
-      - name: Construct version fingerprint
-        id: version_info
-        run: |
-          FINGERPRINT="${TDM_VERSION_TAG}-${BASE_IMAGE_DIGEST}"
-          echo "FINGERPRINT=${FINGERPRINT}" >> $GITHUB_OUTPUT
-
-      - name: Ensure version-check dir exists
-        run: mkdir -p version-check
-
-      - name: Restore version-check cache
-        id: restore_cache
-        uses: actions/cache/restore@v4
-        with:
-          path: version-check
-          key: ${{ steps.version_info.outputs.FINGERPRINT }}
-
-      - name: Check if fingerprint is cached
-        if: steps.restore_cache.outputs.cache-hit == 'true'
-        run: echo "Cache was hit, so we already have version-check/fingerprint."
-
       - name: Build and push
-        if: steps.restore_cache.outputs.cache-hit != 'true'
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: linux/amd64,linux/arm64,linux/386
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: dungfu/twitch-drops-miner:latest
-          build-args: |
-            BASE_TAG=${{ steps.get_highest_tag.outputs.highest_tag }}
-            TDM_VERSION_TAG=${{ env.TDM_VERSION_TAG }}
           pull: true
           no-cache: true
-
-      - name: Save version-check cache
-        if: steps.restore_cache.outputs.cache-hit != 'true'
-        uses: actions/cache/save@v4
-        with:
-          path: version-check
-          key: ${{ steps.version_info.outputs.FINGERPRINT }}

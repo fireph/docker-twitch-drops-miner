@@ -1,57 +1,33 @@
-ARG BASE_TAG
-FROM jlesage/baseimage-gui:${BASE_TAG}
+# Pull base image.
+FROM jlesage/baseimage-gui:ubuntu-24.04-v4
 
-LABEL org.opencontainers.image.authors="fireph"
-
-# Add architecture detection
-ARG TARGETARCH
-ARG TARGETVARIANT
-ARG TDM_VERSION_TAG
+MAINTAINER fireph
 
 # Environment
 ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV APP_ICON_URL=https://raw.githubusercontent.com/fireph/TwitchDropsMiner-Alpine/master/appimage/pickaxe.png
+ENV TDM_VERSION_TAG 2737936
+ENV APP_ICON_URL https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
-# Install dependencies
-RUN add-pkg wget \
-    jpeg \
-    zlib \
-    freetype \
-    tk \
-    tcl \
-    font-noto \
-    font-noto-emoji \
-    fontconfig \
-    libx11 \
-    libxrender
+# Install Twitch Drops Miner
+RUN apt-get update -y
+RUN apt-get install -y wget unzip libc6 gir1.2-appindicator3-0.1 language-pack-en fonts-noto-color-emoji
+RUN wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller-x86_64.zip
+RUN mkdir /TwitchDropsMiner
+RUN unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller-x86_64.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
+RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
+RUN rm -rf /tmp
 
-# Download and install the correct binary based on architecture
-RUN case "${TARGETARCH}${TARGETVARIANT}" in \
-        "amd64")  BINARY_SUFFIX="-amd64" ;; \
-        "arm64")  BINARY_SUFFIX="-arm64" ;; \
-        "armv7")  BINARY_SUFFIX="-armv7" ;; \
-        "armv6")  BINARY_SUFFIX="-armv6" ;; \
-        "386")  BINARY_SUFFIX="-386" ;; \
-        *)        echo "Unsupported architecture: ${TARGETARCH}${TARGETVARIANT}" && exit 1 ;; \
-    esac && \
-    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner-Alpine/releases/download/v${TDM_VERSION_TAG}/TwitchDropsMiner-linux-musl${BINARY_SUFFIX}.tar.gz && \
-    mkdir /TwitchDropsMiner && \
-    cd /tmp && \
-    tar -zxvf TwitchDropsMiner-linux-musl${BINARY_SUFFIX}.tar.gz && \
-    mv "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" /TwitchDropsMiner/TwitchDropsMiner && \
-    chmod +x /TwitchDropsMiner/TwitchDropsMiner && \
-    rm -rf /tmp
-
-# Link config/cache folders
-RUN ln -s /config /TwitchDropsMiner/config
-RUN ln -s /cache /TwitchDropsMiner/cache
+# Link config folder files
+RUN mkdir /TwitchDropsMiner/config
+RUN ln -s /TwitchDropsMiner/config/settings.json /TwitchDropsMiner/settings.json
+RUN ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar
 
 # Make sure permissions are gonna work
 RUN chmod -R 777 /TwitchDropsMiner
 
-# Copy the start script
+# Copy the start script.
 COPY startapp.sh /startapp.sh
 RUN chmod +x /startapp.sh
 
