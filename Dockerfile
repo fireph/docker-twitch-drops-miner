@@ -17,13 +17,16 @@ FROM jlesage/baseimage-gui:ubuntu-24.04-v4
 LABEL maintainer="fireph"
 
 # Environment
-ENV LANG=en_US.UTF-8
-ENV LANGUAGE=en_US:en
-ENV LC_ALL=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
 ENV TDM_VERSION_TAG=16.dev.2737936
 ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
+
+# Setup locale
+RUN add-pkg locales && \
+    sed-patch 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
+    locale-gen
+ENV LANG=en_US.UTF-8
 
 # Only install runtime dependencies
 RUN apt-get update -y && \
@@ -32,9 +35,6 @@ RUN apt-get update -y && \
     libc6 \
     gir1.2-appindicator3-0.1 \
     fonts-noto-color-emoji \
-    locales && \
-    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
-    locale-gen && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
 
