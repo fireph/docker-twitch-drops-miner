@@ -34,7 +34,7 @@ RUN apt-get update -y && \
     ca-certificates \
     libc6 \
     gir1.2-appindicator3-0.1 \
-    fonts-noto-color-emoji \
+    fonts-noto-color-emoji && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
 
