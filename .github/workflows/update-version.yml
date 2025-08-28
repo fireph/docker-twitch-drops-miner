@@ -21,8 +21,8 @@ jobs:
           # Get the latest dev-build release info
           release_info=$(curl -s "https://api.github.com/repos/DevilXD/TwitchDropsMiner/releases/tags/dev-build")
           
-          # Extract commit hash from "Reference commit: xxxxx" in body
-          commit_hash=$(echo "$release_info" | jq -r '.body' | grep -o 'Reference commit: [a-f0-9]+' | cut -d' ' -f3)
+          # Extract commit hash from "Reference commit: xxxxx" in body using capture group
+          commit_hash=$(echo "$release_info" | jq -r '.body' | sed -n 's/.*Reference commit: \([a-f0-9]\+\).*/\1/p')
           
           if [ -z "$commit_hash" ]; then
             echo "Could not extract commit hash from release body"
