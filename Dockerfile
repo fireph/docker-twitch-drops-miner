@@ -7,7 +7,7 @@ LABEL maintainer="fireph"
 ENV LANG=en_US.UTF-8
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG=v16.dev.2737936
+ENV TDM_VERSION_TAG=16.dev.2737936
 ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
 # Install Twitch Drops Miner dependencies

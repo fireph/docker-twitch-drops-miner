@@ -46,7 +46,7 @@ jobs:
         id: update-dockerfile
         run: |
           commit_hash="${{ steps.get-release.outputs.commit_hash }}"
-          new_version="v16.dev.$commit_hash"
+          new_version="16.dev.$commit_hash"
           current_version="${{ steps.current-version.outputs.current_version }}"
 
           if [ "$new_version" != "$current_version" ]; then
