@@ -23,9 +23,9 @@ RUN case ${TARGETARCH} in \
     esac && \
     wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip && \
     mkdir /TwitchDropsMiner && \
-    unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner
+    unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner/TwitchDropsMiner && \
+    rm -f /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip
 RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
-RUN rm -rf /tmp
 
 # Link config folder files
 RUN mkdir /TwitchDropsMiner/config
