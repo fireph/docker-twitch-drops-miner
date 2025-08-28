@@ -1,7 +1,7 @@
 # Pull base image.
 FROM jlesage/baseimage-gui:ubuntu-24.04-v4
 
-MAINTAINER fireph
+LABEL maintainer="fireph"
 
 # Environment
 ENV LANG=en_US.UTF-8
@@ -13,6 +13,7 @@ ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/mast
 # Install Twitch Drops Miner dependencies
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
+    ca-certificates \
     wget \
     unzip \
     libc6 \
