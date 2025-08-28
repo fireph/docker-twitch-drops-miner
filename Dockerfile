@@ -28,9 +28,9 @@ RUN case ${TARGETARCH} in \
 RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
 
 # Link config folder files
-RUN mkdir /TwitchDropsMiner/config
-RUN ln -s /TwitchDropsMiner/config/settings.json /TwitchDropsMiner/settings.json
-RUN ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar
+RUN mkdir /config
+RUN ln -s /config/settings.json /TwitchDropsMiner/settings.json
+RUN ln -s /config/cookies.jar /TwitchDropsMiner/cookies.jar
 
 # Make sure permissions are gonna work
 RUN chmod -R 777 /TwitchDropsMiner
