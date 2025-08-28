@@ -27,11 +27,6 @@ RUN case ${TARGETARCH} in \
     rm -f /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip
 RUN chmod +x /TwitchDropsMiner/TwitchDropsMiner
 
-# Link config folder files
-RUN mkdir -p /config
-RUN ln -s /config/settings.json /TwitchDropsMiner/settings.json
-RUN ln -s /config/cookies.jar /TwitchDropsMiner/cookies.jar
-
 # Make sure permissions are gonna work
 RUN chmod -R 777 /TwitchDropsMiner
 
@@ -41,9 +36,6 @@ RUN chmod +x /startapp.sh
 
 # Generate and install favicons
 RUN install_app_icon.sh "$APP_ICON_URL"
-
-# Take ownership of config directory
-RUN take-ownership /config
 
 # Set the name/version of the application.
 RUN set-cont-env APP_NAME "Twitch Drops Miner"
