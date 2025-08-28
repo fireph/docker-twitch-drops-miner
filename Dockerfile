@@ -30,8 +30,8 @@ RUN apt-get update -y && \
     gir1.2-appindicator3-0.1 \
     fonts-noto-color-emoji \
     locales && \
-    locale-gen "en_US.UTF-8" && \
-    update-locale LANG=en_US.UTF-8 && \
+    echo "en_US.UTF-8 UTF-8" > /etc/locale.gen && \
+    locale-gen && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
 
