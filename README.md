@@ -4,12 +4,11 @@
 
 A Docker container for automatically mining Twitch drops with a web-based GUI interface.
 
-[<img src="https://img.shields.io/docker/pulls/dungfu/twitch-drops-miner" alt="Docker Pulls">](https://hub.docker.com/r/dungfu/twitch-drops-miner){:target="_blank"}
+[<img src="https://img.shields.io/docker/pulls/dungfu/twitch-drops-miner" alt="Docker Pulls">](https://hub.docker.com/r/dungfu/twitch-drops-miner)
 <img src="https://img.shields.io/docker/stars/dungfu/twitch-drops-miner?style=flat-square" alt="Docker Stars">
-[<img src="https://img.shields.io/docker/image-size/dungfu/twitch-drops-miner/latest" alt="Docker Image Size">](https://hub.docker.com/r/dungfu/twitch-drops-miner){:target="_blank"}
-[<img src="https://img.shields.io/github/actions/workflow/status/fireph/docker-twitch-drops-miner/dockerimage-main.yml" alt="GitHub Workflow Status">](https://github.com/fireph/docker-twitch-drops-miner/actions){:target="_blank"}
-
-[<img src="https://img.shields.io/badge/Open%20On-DockerHub-blue?style=for-the-badge&logo=docker" alt="Docker Hub">](https://hub.docker.com/r/dungfu/twitch-drops-miner){:target="_blank"} [<img src="https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github" alt="GitHub Repository">](https://github.com/fireph/docker-twitch-drops-miner){:target="_blank"}
+[<img src="https://img.shields.io/docker/image-size/dungfu/twitch-drops-miner/latest" alt="Docker Image Size">](https://hub.docker.com/r/dungfu/twitch-drops-miner)
+[<img src="https://img.shields.io/github/actions/workflow/status/fireph/docker-twitch-drops-miner/dockerimage-main.yml" alt="GitHub Workflow Status">](https://github.com/fireph/docker-twitch-drops-miner/actions)
+[<img src="https://img.shields.io/badge/Open%20On-DockerHub-blue?style=for-the-badge&logo=docker" alt="Docker Hub">](https://hub.docker.com/r/dungfu/twitch-drops-miner) [<img src="https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github" alt="GitHub Repository">](https://github.com/fireph/docker-twitch-drops-miner)
 
 </div>
 
