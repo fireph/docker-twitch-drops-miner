@@ -1,5 +1,5 @@
 # Download stage
-FROM alpine:latest as downloader
+FROM alpine:latest AS downloader
 ARG TARGETARCH
 RUN apk add --no-cache ca-certificates wget unzip && \
     case ${TARGETARCH} in \
