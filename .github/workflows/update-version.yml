@@ -2,36 +2,36 @@ name: Update TDM Version Tag
 
 on:
   schedule:
-    - cron: '19 8 * * *'
+    - cron: "19 8 * * *"
   workflow_dispatch:
 
 jobs:
   update-version:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
         with:
-          ref: 'main'
+          ref: "main"
 
       - name: Get latest dev-build release
         id: get-release
         run: |
           # Get the latest dev-build release info
           release_info=$(curl -s "https://api.github.com/repos/DevilXD/TwitchDropsMiner/releases/tags/dev-build")
-          
+
           # Extract commit hash from "Reference commit: xxxxx" in body using capture group
           commit_hash=$(echo "$release_info" | jq -r '.body' | sed -n 's/.*Reference commit: \([a-f0-9]\+\).*/\1/p')
-          
+
           if [ -z "$commit_hash" ]; then
             echo "Could not extract commit hash from release body"
             exit 1
           fi
-          
+
           # Take first 7 characters of commit hash
           short_commit=${commit_hash:0:7}
-          
+
           echo "commit_hash=$short_commit" >> $GITHUB_OUTPUT
           echo "Found commit hash: $short_commit"
 
@@ -47,7 +47,7 @@ jobs:
         run: |
           new_version="${{ steps.get-release.outputs.commit_hash }}"
           current_version="${{ steps.current-version.outputs.current_version }}"
-          
+
           if [ "$new_version" != "$current_version" ]; then
             echo "Version changed from $current_version to $new_version"
             sed -i "s/ENV TDM_VERSION_TAG=.*/ENV TDM_VERSION_TAG=$new_version/" Dockerfile
