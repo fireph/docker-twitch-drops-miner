@@ -42,6 +42,9 @@ RUN chmod +x /startapp.sh
 # Generate and install favicons
 RUN install_app_icon.sh "$APP_ICON_URL"
 
+# Take ownership of config directory
+RUN take-ownership /config
+
 # Set the name/version of the application.
 RUN set-cont-env APP_NAME "Twitch Drops Miner"
 RUN set-cont-env APP_VERSION "$TDM_VERSION_TAG"
