@@ -26,8 +26,7 @@ This project provides a containerized version of [Twitch Drops Miner](https://gi
 docker run -d \
   --name twitch-drops-miner \
   -p 5800:5800 \
-  -v /path/to/settings.json:/TwitchDropsMiner/settings.json \
-  -v /path/to/cookies.jar:/TwitchDropsMiner/cookies.jar \
+  -v /path/to/config:/TwitchDropsMiner/config \
   -v /path/to/cache:/TwitchDropsMiner/cache \
   -e USER_ID=1000 \
   -e GROUP_ID=1000 \
@@ -45,8 +44,7 @@ services:
     ports:
       - "5800:5800"
     volumes:
-      - ./settings.json:/TwitchDropsMiner/settings.json
-      - ./cookies.jar:/TwitchDropsMiner/cookies.jar
+      - ./config:/TwitchDropsMiner/config
       - ./cache:/TwitchDropsMiner/cache
     environment:
       - USER_ID=1000
@@ -59,8 +57,7 @@ services:
 
 | Path | Description | Required |
 |------|-------------|----------|
-| `/TwitchDropsMiner/settings.json` | Application settings and configuration | ✅ Yes |
-| `/TwitchDropsMiner/cookies.jar` | Twitch authentication cookies | ✅ Yes |
+| `/TwitchDropsMiner/config` | Application settings and configuration | ✅ Yes |
 | `/TwitchDropsMiner/cache` | Cache directory for better performance | ⚠️ Recommended |
 
 ## 🌐 Access

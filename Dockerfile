@@ -28,7 +28,7 @@ RUN add-pkg locales && \
     locale-gen
 ENV LANG=en_US.UTF-8
 
-# Only install runtime dependencies
+# Install runtime dependencies
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
@@ -38,9 +38,11 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
 
-# Copy binary from build stage
+# Copy binary from build stage and link config directory
 COPY --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
-RUN mkdir -p /TwitchDropsMiner && \
+RUN mkdir -p /TwitchDropsMiner/config && \
+    ln -s /TwitchDropsMiner/config/settings.json /TwitchDropsMiner/settings.json && \
+    ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar && \
     chmod -R 777 /TwitchDropsMiner
 
 # Copy the start script and setup application
