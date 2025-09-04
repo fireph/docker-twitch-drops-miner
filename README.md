@@ -63,7 +63,7 @@ services:
 | `/TwitchDropsMiner/cache` | Cache directory for better performance | ⚠️ Recommended |
 
 > [!IMPORTANT]  
-> If you are running into permissions issues, make sure the user (default: uid 1000/gid 1000) has read/write permissions on your mounted directory. If don't want to worry about users, `chmod -R 777` on your mounted directory will fix the problem as well.
+> If you are running into permissions issues, make sure the user (default: uid 1000/gid 1000) has read/write permissions on your mounted directory. If you don't want to worry about users, `chmod -R 777` on your mounted directory will fix the problem as well.
 
 ## 🌐 Access
 
