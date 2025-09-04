@@ -1,5 +1,7 @@
 <div align="center">
 
+![Twitch Drops Miner Icon](https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/refs/heads/master/icons/pickaxe.ico)
+
 # Docker Twitch Drops Miner
 
 A Docker container for automatically mining Twitch drops with a web-based GUI interface.
