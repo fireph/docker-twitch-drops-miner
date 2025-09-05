@@ -74,7 +74,7 @@ services:
 
 After starting the container, access the web interface at:
 - **URL**: `http://localhost:5800`
-- **VNC**: Connect to `localhost:5900` (if VNC access is needed)
+- **VNC**: `localhost:5900` (if VNC access is needed)
 
 ## ⚙️ Environment Variables
 
