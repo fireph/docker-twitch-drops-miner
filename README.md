@@ -104,9 +104,9 @@ docker run -d -p 5800:5800 dungfu/twitch-drops-miner:latest
 
 ## 🔧 Configuration
 
-1. **First Run**: Access the web interface and configure your Twitch account
-2. **Settings**: Modify `/TwitchDropsMiner/config/settings.json` for advanced configuration
-3. **Authentication**: Login through the web interface to generate cookies.jar
+1. **First Run**: Access the web interface using `http://localhost:5800`
+2. **Authentication**: Login through the web interface to your Twitch account to generate cookies.jar
+3. **Settings**: Modify settings in the Settings tab or in `/TwitchDropsMiner/config/settings.json`
 
 ## 🐳 Docker Hub
 
