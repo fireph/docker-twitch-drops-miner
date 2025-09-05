@@ -4,7 +4,7 @@
 
 # Docker Twitch Drops Miner
 
-A Docker container for automatically mining Twitch drops with a web-based GUI interface.
+An unofficial Docker container for automatically mining Twitch drops with a web-based GUI interface.
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/dungfu/twitch-drops-miner?style=flat-square)
 ![Docker Stars](https://img.shields.io/docker/stars/dungfu/twitch-drops-miner?style=flat-square)
@@ -21,7 +21,7 @@ A Docker container for automatically mining Twitch drops with a web-based GUI in
 A containerized version of [Twitch Drops Miner](https://github.com/DevilXD/TwitchDropsMiner) with a web-based GUI for easy management. It's built on [jlesage/docker-baseimage-gui](https://github.com/jlesage/docker-baseimage-gui) for the web GUI interface.
 
 > [!IMPORTANT]
-> This is not an official docker image, **DO NOT** report docker issues to [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/TwitchDropsMiner)
+> This is an unofficial docker image, **DO NOT** report docker issues to [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/TwitchDropsMiner)
 
 ## 🚀 Quick Start
 
