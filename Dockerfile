@@ -44,7 +44,8 @@ RUN mkdir -p /TwitchDropsMiner/config && \
     touch /TwitchDropsMiner/config/settings.json && \
     touch /TwitchDropsMiner/config/cookies.jar && \
     ln -s /TwitchDropsMiner/config/settings.json /TwitchDropsMiner/settings.json && \
-    ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar
+    ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar && \
+    chmod -R 777 /TwitchDropsMiner
 
 # Copy the start script and setup application
 COPY startapp.sh /startapp.sh
