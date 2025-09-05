@@ -20,6 +20,8 @@ An unofficial Docker container for automatically mining Twitch drops with a web-
 
 A containerized version of [Twitch Drops Miner](https://github.com/DevilXD/TwitchDropsMiner) with a web-based GUI for easy management. It's built on [jlesage/docker-baseimage-gui](https://github.com/jlesage/docker-baseimage-gui) for the web GUI interface.
 
+The app can also run into issues periodically, so restarting the container daily is recommended to make sure mining continues even if an error occurs.
+
 > [!IMPORTANT]
 > This is an unofficial docker image, **DO NOT** report docker issues to [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/TwitchDropsMiner)
 
