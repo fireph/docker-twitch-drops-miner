@@ -51,8 +51,8 @@ services:
     ports:
       - "5800:5800"
     volumes:
-      - ./config:/TwitchDropsMiner/config
-      - ./cache:/TwitchDropsMiner/cache
+      - /path/to/config:/TwitchDropsMiner/config
+      - /path/to/cache:/TwitchDropsMiner/cache
     environment:
       - USER_ID=1000
       - GROUP_ID=1000
