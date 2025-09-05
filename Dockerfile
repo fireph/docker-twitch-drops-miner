@@ -29,8 +29,7 @@ RUN add-pkg locales && \
 ENV LANG=en_US.UTF-8
 
 # Install runtime dependencies
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
     ca-certificates \
     libc6 \
     gir1.2-appindicator3-0.1 \
