@@ -68,14 +68,15 @@ jobs:
           git commit -m "Update TDM_VERSION_TAG to ${{ steps.update-dockerfile.outputs.new_version }}"
           git push
 
-      - name: Trigger docker build
+      - name: Create GitHub Release
         if: steps.update-dockerfile.outputs.changed == 'true'
-        uses: actions/github-script@v7
+        uses: actions/create-release@v1
         with:
-          script: |
-            await github.rest.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'dockerimage-main.yml',
-              ref: 'main'
-            });
+          tag_name: ${{ steps.update-dockerfile.outputs.new_version }}
+          release_name: "v${{ steps.update-dockerfile.outputs.new_version }}"
+          body: |
+            Updated Twitch Drops Miner to v${{ steps.update-dockerfile.outputs.new_version }}
+
+            Docker image at: https://hub.docker.com/r/dungfu/twitch-drops-miner
+          draft: false
+          prerelease: false
