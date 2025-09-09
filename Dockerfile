@@ -7,8 +7,8 @@ RUN apk add --no-cache ca-certificates wget unzip && \
       "arm64") ARCH_SUFFIX="aarch64" ;; \
       *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
     esac && \
-    wget -P /tmp/ https://github.com/DevilXD/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip && \
-    unzip -p /tmp/Twitch.Drops.Miner.Linux.PyInstaller-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner && \
+    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.AppImage-${ARCH_SUFFIX}.zip && \
+    unzip -p /tmp/Twitch.Drops.Miner.Linux.AppImage-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch.Drops.Miner-${ARCH_SUFFIX}.AppImage" >/TwitchDropsMiner && \
     chmod +x /TwitchDropsMiner
 
 # Final image

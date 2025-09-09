@@ -19,7 +19,7 @@ jobs:
         id: get-release
         run: |
           # Get the latest dev-build release info
-          release_info=$(curl -s "https://api.github.com/repos/DevilXD/TwitchDropsMiner/releases/tags/dev-build")
+          release_info=$(curl -s "https://api.github.com/repos/fireph/TwitchDropsMiner/releases/tags/dev-build")
 
           # Extract commit hash from "Reference commit: xxxxx" in body using capture group
           commit_hash=$(echo "$release_info" | jq -r '.body' | sed -n 's/.*Reference commit: \([a-f0-9]\+\).*/\1/p')
@@ -78,7 +78,7 @@ jobs:
           body: |
             Updated Twitch Drops Miner to v${{ steps.update-dockerfile.outputs.new_version }}
 
-            Reference commit: https://github.com/DevilXD/TwitchDropsMiner/commit/${{ steps.get-release.outputs.full_commit_hash }}
+            Reference commit: https://github.com/fireph/TwitchDropsMiner/commit/${{ steps.get-release.outputs.full_commit_hash }}
 
             Docker image at: https://hub.docker.com/r/dungfu/twitch-drops-miner
           draft: false
