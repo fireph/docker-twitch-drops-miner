@@ -35,8 +35,6 @@ RUN apt-get update -y && \
     libc6 \
     fonts-noto-color-emoji \
     libx11-6 \
-    libxext6 \
-    libxrender1 \
     libxft2 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
