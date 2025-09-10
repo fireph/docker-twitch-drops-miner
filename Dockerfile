@@ -33,8 +33,11 @@ RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
     libc6 \
-    gir1.2-appindicator3-0.1 \
-    fonts-noto-color-emoji && \
+    fonts-noto-color-emoji \
+    libx11-6 \
+    libxext6 \
+    libxrender1 \
+    libxft2 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
 
