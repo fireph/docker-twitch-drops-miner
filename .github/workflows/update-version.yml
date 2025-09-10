@@ -73,12 +73,10 @@ jobs:
 
       - name: Create GitHub Release
         if: steps.update-dockerfile.outputs.changed == 'true'
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ steps.update-dockerfile.outputs.new_version }}
-          release_name: "v${{ steps.update-dockerfile.outputs.new_version }}"
+          name: "v${{ steps.update-dockerfile.outputs.new_version }}"
           body: |
             Updated Twitch Drops Miner to v${{ steps.update-dockerfile.outputs.new_version }}
 
@@ -87,3 +85,4 @@ jobs:
             Docker image at: https://hub.docker.com/r/dungfu/twitch-drops-miner
           draft: false
           prerelease: false
+          token: ${{ secrets.PAT_TOKEN }}
