@@ -48,9 +48,14 @@ RUN mkdir -p /TwitchDropsMiner/config && \
     ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar && \
     chmod -R 777 /TwitchDropsMiner
 
-# Copy the start script and setup application
+# Copy the start script and healthcheck script, then setup application
 COPY startapp.sh /startapp.sh
+COPY healthcheck.sh /healthcheck.sh
 RUN chmod +x /startapp.sh && \
+    chmod +x /healthcheck.sh && \
     install_app_icon.sh "$APP_ICON_URL" && \
     set-cont-env APP_NAME "Twitch Drops Miner" && \
     set-cont-env APP_VERSION "$TDM_VERSION_TAG"
+
+# Add healthcheck
+HEALTHCHECK --interval=30s --timeout=10s --start-period=40s --retries=3 CMD /healthcheck.sh
