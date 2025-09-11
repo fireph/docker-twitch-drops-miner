@@ -41,12 +41,7 @@ RUN apt-get update -y && \
 
 # Copy binary from build stage and link config directory
 COPY --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
-RUN mkdir -p /TwitchDropsMiner/config && \
-    touch /TwitchDropsMiner/config/settings.json && \
-    touch /TwitchDropsMiner/config/cookies.jar && \
-    ln -s /TwitchDropsMiner/config/settings.json /TwitchDropsMiner/settings.json && \
-    ln -s /TwitchDropsMiner/config/cookies.jar /TwitchDropsMiner/cookies.jar && \
-    chmod -R 777 /TwitchDropsMiner
+RUN take-ownership /TwitchDropsMiner
 
 # Copy the start script and setup application
 COPY startapp.sh /startapp.sh
