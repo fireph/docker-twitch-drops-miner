@@ -85,7 +85,6 @@ jobs:
 
       - name: Create and push multi-arch manifests
         run: |
-          # Create multi-arch manifests
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:latest \
             dungfu/twitch-drops-miner:temp-x86_64-${{ github.run_id }} \
@@ -103,7 +102,6 @@ jobs:
 
       - name: Clean up temp tags
         run: |
-          # Delete temp tags (requires Docker Hub API)
           curl -X DELETE \
             -H "Authorization: JWT $(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${{ secrets.DOCKER_NAME }}", "password": "${{ secrets.DOCKER_TOKEN }}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)" \
             "https://hub.docker.com/v2/repositories/dungfu/twitch-drops-miner/tags/temp-x86_64-${{ github.run_id }}/"
