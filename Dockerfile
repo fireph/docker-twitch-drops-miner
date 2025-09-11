@@ -19,7 +19,7 @@ LABEL maintainer="fireph"
 # Environment
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG=16.dev.3189ff3
+ENV TDM_VERSION_TAG=16.dev.ff4a2f6
 ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
 # Setup locale
