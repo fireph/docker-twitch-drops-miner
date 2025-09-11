@@ -47,7 +47,7 @@ jobs:
         with:
           context: .
           platforms: ${{ matrix.arch == 'x86_64' && 'linux/amd64' || 'linux/arm64' }}
-          push: true
+          push: ${{ github.event_name == 'release' }}
           tags: |
             dungfu/twitch-drops-miner:latest
             dungfu/twitch-drops-miner:16.dev
@@ -56,6 +56,7 @@ jobs:
           no-cache: true
 
       - name: Update Docker Hub README
+        if: ${{ github.event_name == 'release' }}
         uses: peter-evans/dockerhub-description@v4
         with:
           username: ${{ secrets.DOCKER_NAME }}
