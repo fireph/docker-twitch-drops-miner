@@ -39,9 +39,9 @@ RUN apt-get update -y && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
 
-# Copy binary from build stage and link config directory
+# Copy binary from build stage
 COPY --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
-RUN take-ownership /TwitchDropsMiner
+RUN chmod -R 777 /TwitchDropsMiner
 
 # Copy the start script and setup application
 COPY startapp.sh /startapp.sh
