@@ -2,7 +2,7 @@ name: Update TDM Version Tag
 
 on:
   schedule:
-    - cron: "19 8 * * *"
+    - cron: "15 */6 * * *"
   workflow_dispatch:
 
 jobs:
