@@ -7,12 +7,12 @@ RUN apk add --no-cache ca-certificates wget unzip && \
       "arm64") ARCH_SUFFIX="aarch64" ;; \
       *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
     esac && \
-    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.AppImage-${ARCH_SUFFIX}.zip && \
-    unzip -p /tmp/Twitch.Drops.Miner.Linux.AppImage-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch.Drops.Miner-${ARCH_SUFFIX}.AppImage" >/TwitchDropsMiner && \
+    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.musl.PyInstaller-${ARCH_SUFFIX}.zip && \
+    unzip -p /tmp/Twitch.Drops.Miner.Linux.musl.PyInstaller-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner && \
     chmod +x /TwitchDropsMiner
 
 # Final image
-FROM jlesage/baseimage-gui:ubuntu-24.04-v4
+FROM jlesage/baseimage-gui:alpine-3.22-v4
 
 LABEL maintainer="fireph"
 
@@ -26,16 +26,13 @@ ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/mast
 COPY ./fonts/ /usr/share/fonts/
 
 # Install runtime dependencies
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
+RUN apk add --no-cache \
     ca-certificates \
-    libc6 \
     fontconfig \
-    libbrotli1 \
-    libx11-6 \
-    libxrender1 && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/* && \
+    ttf-dejavu \
+    brotli-libs \
+    libx11 \
+    libxrender && \
     fc-cache -fv
 
 # Copy binary from build stage

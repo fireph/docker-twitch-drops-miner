@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /TwitchDropsMiner/TwitchDropsMiner --appimage-extract-and-run --stdlog
+exec /TwitchDropsMiner/TwitchDropsMiner --stdlog
