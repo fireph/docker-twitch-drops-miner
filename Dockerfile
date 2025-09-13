@@ -22,12 +22,6 @@ ENV KEEP_APP_RUNNING=1
 ENV TDM_VERSION_TAG=16.dev.6cb5b03
 ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
-# Setup locale
-RUN add-pkg locales && \
-    sed-patch 's/# en_US.UTF-8 UTF-8/en_US.UTF-8 UTF-8/' /etc/locale.gen && \
-    locale-gen
-ENV LANG=en_US.UTF-8
-
 # Copy fonts needed for emojis
 COPY ./fonts/ /usr/share/fonts/
 
