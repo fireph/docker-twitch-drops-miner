@@ -31,8 +31,9 @@ RUN apt-get update -y && \
     ca-certificates \
     libc6 \
     fontconfig \
+    libbrotli1 \
     libx11-6 \
-    libxft2 && \
+    libxrender1 && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/* && \
     fc-cache -fv
