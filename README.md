@@ -1,6 +1,6 @@
 <div align="center">
 
-![Twitch Drops Miner Icon](https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/refs/heads/master/icons/pickaxe.ico)
+![Twitch Drops Miner Icon](https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png)
 
 # Docker Twitch Drops Miner
 
