@@ -28,16 +28,20 @@ RUN add-pkg locales && \
     locale-gen
 ENV LANG=en_US.UTF-8
 
+# Copy fonts needed for emojis
+COPY ./fonts/ /usr/share/fonts/
+
 # Install runtime dependencies
 RUN apt-get update -y && \
     apt-get install -y --no-install-recommends \
     ca-certificates \
     libc6 \
-    fonts-noto-color-emoji \
+    fontconfig \
     libx11-6 \
     libxft2 && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/*
+    rm -rf /var/lib/apt/lists/* /var/cache/* /tmp/* /var/log/* && \
+    fc-cache -fv
 
 # Copy binary from build stage
 COPY --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
