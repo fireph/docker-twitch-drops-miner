@@ -112,7 +112,8 @@ docker run -d -p 5800:5800 dungfu/twitch-drops-miner:latest
 
 This image is automatically built and published to Docker Hub:
 - **Repository**: [dungfu/twitch-drops-miner](https://hub.docker.com/r/dungfu/twitch-drops-miner)
-- **Tags**: `latest` (multi-arch: `linux/amd64`, `linux/arm64`, `linux/386`, `linux/arm/v7`, `linux/arm/v6`)
+- **Tags**: `latest`, `16.dev`, `16.dev.{version}`
+- **Architectures**: `linux/amd64`, `linux/arm64`, `linux/386`, `linux/arm/v7`, `linux/arm/v6`
 
 ## 🤝 Contributing
 
