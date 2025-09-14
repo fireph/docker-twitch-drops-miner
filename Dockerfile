@@ -5,6 +5,9 @@ RUN apk add --no-cache ca-certificates wget unzip && \
     case ${TARGETARCH} in \
       "amd64") ARCH_SUFFIX="x86_64" ;; \
       "arm64") ARCH_SUFFIX="aarch64" ;; \
+      "386") ARCH_SUFFIX="i386" ;; \
+      "arm/v7") ARCH_SUFFIX="armv7" ;; \
+      "arm/v6") ARCH_SUFFIX="armv6" ;; \
       *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
     esac && \
     wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.musl.PyInstaller-${ARCH_SUFFIX}.zip && \
