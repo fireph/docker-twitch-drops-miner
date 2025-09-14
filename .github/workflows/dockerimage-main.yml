@@ -11,8 +11,19 @@ jobs:
       matrix:
         include:
           - arch: x86_64
+            platform: linux/amd64
             runner: ubuntu-24.04
           - arch: aarch64
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+          - arch: i386
+            platform: linux/386
+            runner: ubuntu-24.04
+          - arch: armv7
+            platform: linux/arm/v7
+            runner: ubuntu-24.04-arm
+          - arch: armv6
+            platform: linux/arm/v6
             runner: ubuntu-24.04-arm
     runs-on: ${{matrix.runner}}
 
@@ -46,7 +57,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: .
-          platforms: ${{ matrix.arch == 'x86_64' && 'linux/amd64' || 'linux/arm64' }}
+          platforms: ${{ matrix.platform }}
           push: ${{ github.event_name == 'release' }}
           tags: |
             dungfu/twitch-drops-miner:temp-${{ matrix.arch }}-${{ github.run_id }}
@@ -85,30 +96,39 @@ jobs:
 
       - name: Create and push multi-arch manifests
         run: |
+          ARCHS=("x86_64" "aarch64" "i386" "armv7" "armv6")
+          TEMP_TAGS=()
+
+          for arch in "${ARCHS[@]}"; do
+            TEMP_TAGS+=("dungfu/twitch-drops-miner:temp-${arch}-${{ github.run_id }}")
+          done
+
+          # Create latest tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:latest \
-            dungfu/twitch-drops-miner:temp-x86_64-${{ github.run_id }} \
-            dungfu/twitch-drops-miner:temp-aarch64-${{ github.run_id }}
-            
+            "${TEMP_TAGS[@]}"
+
+          # Create dev tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:16.dev \
-            dungfu/twitch-drops-miner:temp-x86_64-${{ github.run_id }} \
-            dungfu/twitch-drops-miner:temp-aarch64-${{ github.run_id }}
-            
+            "${TEMP_TAGS[@]}"
+
+          # Create version tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:${{ steps.version.outputs.version }} \
-            dungfu/twitch-drops-miner:temp-x86_64-${{ github.run_id }} \
-            dungfu/twitch-drops-miner:temp-aarch64-${{ github.run_id }}
+            "${TEMP_TAGS[@]}"
 
       - name: Clean up temp tags
         run: |
-          curl -X DELETE \
-            -H "Authorization: JWT $(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${{ secrets.DOCKER_NAME }}", "password": "${{ secrets.DOCKER_TOKEN }}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)" \
-            "https://hub.docker.com/v2/repositories/dungfu/twitch-drops-miner/tags/temp-x86_64-${{ github.run_id }}/"
-          
-          curl -X DELETE \
-            -H "Authorization: JWT $(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${{ secrets.DOCKER_NAME }}", "password": "${{ secrets.DOCKER_TOKEN }}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)" \
-            "https://hub.docker.com/v2/repositories/dungfu/twitch-drops-miner/tags/temp-aarch64-${{ github.run_id }}/"
+          TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${{ secrets.DOCKER_NAME }}", "password": "${{ secrets.DOCKER_TOKEN }}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
+
+          ARCHS=("x86_64" "aarch64" "i386" "armv7" "armv6")
+
+          for arch in "${ARCHS[@]}"; do
+            curl -X DELETE \
+              -H "Authorization: JWT $TOKEN" \
+              "https://hub.docker.com/v2/repositories/dungfu/twitch-drops-miner/tags/temp-${arch}-${{ github.run_id }}/"
+          done
 
       - name: Update Docker Hub README
         uses: peter-evans/dockerhub-description@v4
