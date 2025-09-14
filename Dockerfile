@@ -26,7 +26,7 @@ LABEL maintainer="fireph"
 # Environment
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG=16.dev.ca8b420
+ENV TDM_VERSION_TAG=16.dev.442a0c5
 ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
 # Copy fonts needed for emojis
