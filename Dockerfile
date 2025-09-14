@@ -29,7 +29,7 @@ COPY ./fonts/ /usr/share/fonts/
 RUN apk add --no-cache \
     ca-certificates \
     fontconfig \
-    font-droid \
+    font-dejavu \
     brotli-libs \
     libx11 \
     libxrender && \
