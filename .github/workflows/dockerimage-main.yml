@@ -106,9 +106,9 @@ jobs:
             TEMP_TAGS+=("dungfu/twitch-drops-miner:temp-${arch}-${{ github.run_id }}")
           done
 
-          # Create latest tag
+          # Create version tag
           docker buildx imagetools create \
-            -t dungfu/twitch-drops-miner:latest \
+            -t dungfu/twitch-drops-miner:${{ steps.version.outputs.version }} \
             "${TEMP_TAGS[@]}"
 
           # Create dev tag
@@ -116,9 +116,9 @@ jobs:
             -t dungfu/twitch-drops-miner:16.dev \
             "${TEMP_TAGS[@]}"
 
-          # Create version tag
+          # Create latest tag
           docker buildx imagetools create \
-            -t dungfu/twitch-drops-miner:${{ steps.version.outputs.version }} \
+            -t dungfu/twitch-drops-miner:latest \
             "${TEMP_TAGS[@]}"
 
       - name: Clean up temp tags
