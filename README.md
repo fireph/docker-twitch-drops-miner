@@ -38,6 +38,7 @@ docker run -d \
   -e USER_ID=1000 \
   -e GROUP_ID=1000 \
   -e TZ=America/New_York \
+  -e ENABLE_CJK_FONT=1 \
   dungfu/twitch-drops-miner:latest
 ```
 
@@ -57,6 +58,7 @@ services:
       - USER_ID=1000
       - GROUP_ID=1000
       - TZ=America/New_York
+      - ENABLE_CJK_FONT=1
     restart: unless-stopped
 ```
 
