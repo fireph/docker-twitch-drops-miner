@@ -85,6 +85,8 @@ After starting the container, access the web interface at:
 | `USER_ID` | User ID for file permissions | `1000` |
 | `GROUP_ID` | Group ID for file permissions | `1000` |
 | `TZ` | Timezone for the container | `UTC` |
+| `DARK_MODE` | Dark mode for VNC UI | `1` |
+| `ENABLE_CJK_FONT` | zh/ja/ko character support | `1` |
 
 For a complete list of supported environment variables, see the [base image documentation](https://github.com/jlesage/docker-baseimage-gui#environment-variables).
 
