@@ -24,6 +24,7 @@ FROM jlesage/baseimage-gui:alpine-3.22-v4
 LABEL maintainer="fireph"
 
 # Environment
+ENV ENABLE_CJK_FONT=1
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
 ENV TDM_VERSION_TAG=16.dev.b4f89bc
