@@ -19,7 +19,7 @@ RUN apk add --no-cache ca-certificates wget unzip && \
     chmod +x /TwitchDropsMiner
 
 # Final image
-FROM jlesage/baseimage-gui:alpine-3.22-v4
+FROM jlesage/baseimage-gui:alpine-3.23-v4
 
 LABEL maintainer="fireph"
 
