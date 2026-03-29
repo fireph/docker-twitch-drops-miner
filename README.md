@@ -67,9 +67,6 @@ services:
 | `/TwitchDropsMiner/config` | Application settings and configuration | ✅ Yes |
 | `/TwitchDropsMiner/cache` | Cache directory for better performance | ⚠️ Recommended |
 
-> [!IMPORTANT]  
-> If you are running into permissions issues, make sure the user (default: uid 1000/gid 1000) has read/write permissions on your mounted directory. If you don't want to worry about users, `chmod -R 777` on your mounted directory will fix the problem as well.
-
 ## 🌐 Access
 
 After starting the container, access the web interface at:
@@ -90,6 +87,33 @@ After starting the container, access the web interface at:
 
 For a complete list of supported environment variables, see the [base image documentation](https://github.com/jlesage/docker-baseimage-gui#environment-variables).
 
+## 🔧 Configuration
+
+1. **First Run**: Access the web interface using `http://localhost:5800`
+2. **Authentication**: Login through the web interface to your Twitch account to generate cookies.jar
+3. **Settings**: Modify settings in the Settings tab or in `/TwitchDropsMiner/config/settings.json`
+
+## 🐳 Docker Hub
+
+This image is automatically built and published to Docker Hub:
+- **Repository**: [dungfu/twitch-drops-miner](https://hub.docker.com/r/dungfu/twitch-drops-miner)
+- **Tags**: `latest`, `16.dev`, `16.dev.{version}`
+- **Architectures**: `linux/amd64`, `linux/arm64`, `linux/386`, `linux/arm/v7`, `linux/arm/v6`
+
+## 🔍 Troubleshooting
+
+### Permissions issues on mounted volumes
+
+If you are running into permissions issues, make sure the user (default: uid 1000/gid 1000) has read/write permissions on your mounted directory. If you don't want to worry about users, `chmod -R 777` on your mounted directory will fix the problem as well.
+
+### Cannot connect to Twitch / Login not working
+
+If the app can find channels but fails to connect to streams, or if login resets after entering the token, your DNS-level ad blocker may be the cause.
+
+**AdGuard, Pi-hole, and similar tools** can block `beacon.twitch.tv`, which is required for the app to function correctly. To fix this, whitelist `beacon.twitch.tv` in your ad blocker.
+
+See [issue #38](https://github.com/fireph/docker-twitch-drops-miner/issues/38) for more details.
+
 ## 🏗️ Building from Source
 
 ```bash
@@ -103,19 +127,6 @@ docker build -t dungfu/twitch-drops-miner:latest .
 # Run the container
 docker run -d -p 5800:5800 dungfu/twitch-drops-miner:latest
 ```
-
-## 🔧 Configuration
-
-1. **First Run**: Access the web interface using `http://localhost:5800`
-2. **Authentication**: Login through the web interface to your Twitch account to generate cookies.jar
-3. **Settings**: Modify settings in the Settings tab or in `/TwitchDropsMiner/config/settings.json`
-
-## 🐳 Docker Hub
-
-This image is automatically built and published to Docker Hub:
-- **Repository**: [dungfu/twitch-drops-miner](https://hub.docker.com/r/dungfu/twitch-drops-miner)
-- **Tags**: `latest`, `16.dev`, `16.dev.{version}`
-- **Architectures**: `linux/amd64`, `linux/arm64`, `linux/386`, `linux/arm/v7`, `linux/arm/v6`
 
 ## 🤝 Contributing
 
