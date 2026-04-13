@@ -101,7 +101,7 @@ jobs:
 
             Reference commit: https://github.com/fireph/TwitchDropsMiner/commit/${{ steps.get-release.outputs.full_commit_hash }}
 
-            Docker image at: https://hub.docker.com/r/dungfu/twitch-drops-miner/tags?name=${{ steps.update-dockerfile.outputs.new_version }}
+            Docker image at: https://hub.docker.com/r/dungfu/twitch-drops-miner
           draft: false
           prerelease: false
           token: ${{ secrets.PAT_TOKEN }}
