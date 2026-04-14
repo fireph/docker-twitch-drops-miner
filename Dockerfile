@@ -38,8 +38,7 @@ RUN apk add --no-cache \
     fc-cache -fv
 
 # Copy binary from build stage
-COPY --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
-RUN chmod -R 777 /TwitchDropsMiner
+COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
 
 # Copy the start script and setup application
 COPY startapp.sh /startapp.sh

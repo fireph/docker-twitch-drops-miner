@@ -25,8 +25,7 @@ ENV UI_BACKEND=nicegui
 RUN apk add --no-cache ca-certificates
 
 # Copy binary from build stage
-COPY --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
-RUN chmod -R 777 /TwitchDropsMiner
+COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
 
 EXPOSE 8080
 
