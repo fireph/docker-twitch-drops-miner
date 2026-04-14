@@ -74,6 +74,7 @@ jobs:
           if [ "$new_version" != "$current_version" ]; then
             echo "Version changed from $current_version to $new_version"
             sed -i "s/ENV TDM_VERSION_TAG=.*/ENV TDM_VERSION_TAG=$new_version/" Dockerfile
+            sed -i "s/ENV TDM_VERSION_TAG=.*/ENV TDM_VERSION_TAG=$new_version/" Dockerfile.webui
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "new_version=$new_version" >> $GITHUB_OUTPUT
           else
@@ -86,7 +87,7 @@ jobs:
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add Dockerfile
+          git add Dockerfile Dockerfile.webui
           git commit -m "Update TDM_VERSION_TAG to ${{ steps.update-dockerfile.outputs.new_version }}"
           git push
 

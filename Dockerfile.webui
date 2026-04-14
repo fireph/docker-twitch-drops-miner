@@ -1,0 +1,33 @@
+# Download stage
+FROM alpine:latest AS downloader
+ARG TARGETARCH
+ARG TARGETVARIANT
+RUN apk add --no-cache ca-certificates wget unzip && \
+    case ${TARGETARCH} in \
+      "amd64") ARCH_SUFFIX="x86_64" ;; \
+      "arm64") ARCH_SUFFIX="aarch64" ;; \
+      *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
+    esac && \
+    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.musl.PyInstaller-nicegui-${ARCH_SUFFIX}.zip && \
+    unzip -p /tmp/Twitch.Drops.Miner.Linux.musl.PyInstaller-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner && \
+    chmod +x /TwitchDropsMiner
+
+# Final image
+FROM alpine:latest
+
+LABEL maintainer="fireph"
+
+# Environment
+ENV TDM_VERSION_TAG=16.dev.2279235
+ENV UI_BACKEND=nicegui
+
+# Install runtime dependencies
+RUN apk add --no-cache ca-certificates
+
+# Copy binary from build stage
+COPY --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
+RUN chmod -R 777 /TwitchDropsMiner
+
+EXPOSE 8080
+
+CMD ["/TwitchDropsMiner/TwitchDropsMiner", "--stdlog"]
