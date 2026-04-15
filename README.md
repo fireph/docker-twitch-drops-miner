@@ -36,7 +36,7 @@ The app can also run into issues periodically, so restarting the container daily
 >
 > It also uses significantly less RAM (~80MB vs 500-600MB).
 >
-> For the new WebUI, don't use USER_ID or GROUP_ID to run as a specific user, use:
+> For the new WebUI, don't use USER_ID or GROUP_ID. To run as a specific user, use:
 >
 > `docker run -d -u 1000:1000 ...`
 
