@@ -25,6 +25,21 @@ The app can also run into issues periodically, so restarting the container daily
 > [!IMPORTANT]
 > This is an unofficial docker image, **DO NOT** report docker issues to [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/TwitchDropsMiner)
 
+> [!NOTE]
+> **🧪 Beta: WebUI Mode** - Try the new browser-based WebUI interface!
+>
+> Instead of using the desktop GUI via VNC, you can now use the experimental WebUI mode by using the `webui` tag instead of `latest`:
+> ```bash
+> dungfu/twitch-drops-miner:webui
+> ```
+> Access it at `http://localhost:8080` after starting the container. This is a native web interface that works directly in your browser without requiring a VNC client.
+>
+> It also uses significantly less RAM (~80MB vs 500-600MB).
+>
+> For the new WebUI, don't use USER_ID or GROUP_ID to run as a specific user, use:
+>
+> `docker run -d -u 1000:1000 ...`
+
 ## 🚀 Quick Start
 
 ### Docker Run
@@ -97,8 +112,8 @@ For a complete list of supported environment variables, see the [base image docu
 
 This image is automatically built and published to Docker Hub:
 - **Repository**: [dungfu/twitch-drops-miner](https://hub.docker.com/r/dungfu/twitch-drops-miner)
-- **Tags**: `latest`, `16.dev`, `16.dev.{version}`
-- **Architectures**: `linux/amd64`, `linux/arm64`, `linux/386`, `linux/arm/v7`, `linux/arm/v6`
+- **Tags**: `latest`, `16.dev`, `16.dev.{version}`, `webui`, `webui-16.dev`, `webui-16.dev.{version}`
+- **Architectures**: `linux/amd64`, `linux/arm64`
 
 ## 🔍 Troubleshooting
 
