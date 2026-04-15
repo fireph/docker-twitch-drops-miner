@@ -126,7 +126,7 @@ git clone https://github.com/fireph/docker-twitch-drops-miner.git
 cd docker-twitch-drops-miner
 
 # Build the WebUI image
-docker build -f Dockerfile-webui -t dungfu/twitch-drops-miner:webui .
+docker build -f Dockerfile.webui -t dungfu/twitch-drops-miner:webui .
 
 # Run the container
 docker run -d -p 8080:8080 dungfu/twitch-drops-miner:webui
