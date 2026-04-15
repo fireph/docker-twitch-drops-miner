@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  twitch-drops-miner:
+  twitch-drops-miner-tkinter:
     strategy:
       matrix:
         include:
@@ -20,15 +20,15 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: "main"
 
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@v3
+        uses: docker/setup-qemu-action@v4
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Extract version from tag
         id: version
@@ -42,43 +42,86 @@ jobs:
           echo "Version: $VERSION"
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_NAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
-      - name: Build and push temp tags
-        uses: docker/build-push-action@v6
+      - name: Build and push tinkter temp tags
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: Dockerfile
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name == 'release' }}
           tags: |
-            dungfu/twitch-drops-miner:temp-${{ matrix.arch }}-${{ github.run_id }}
+            dungfu/twitch-drops-miner:temp-tkinter-${{ matrix.arch }}-${{ github.run_id }}
           pull: true
           no-cache: true
 
-      - name: Build and push webui temp tags
-        uses: docker/build-push-action@v6
+  twitch-drops-miner-nicegui:
+    strategy:
+      matrix:
+        include:
+          - arch: x86_64
+            platform: linux/amd64
+            runner: ubuntu-24.04
+          - arch: aarch64
+            platform: linux/arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{matrix.runner}}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: "main"
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v4
+
+      - name: Extract version from tag
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            VERSION=${{ github.event.release.tag_name }}
+          else
+            VERSION=$(grep "ENV TDM_VERSION_TAG=" Dockerfile | cut -d'=' -f2)
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "Version: $VERSION"
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v4
+        with:
+          username: ${{ secrets.DOCKER_NAME }}
+          password: ${{ secrets.DOCKER_TOKEN }}
+
+      - name: Build and push nicegui temp tags
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: Dockerfile.webui
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name == 'release' }}
           tags: |
-            dungfu/twitch-drops-miner:temp-webui-${{ matrix.arch }}-${{ github.run_id }}
+            dungfu/twitch-drops-miner:temp-nicegui-${{ matrix.arch }}-${{ github.run_id }}
           pull: true
           no-cache: true
 
   combine-and-push:
     runs-on: ubuntu-latest
-    needs: twitch-drops-miner
+    needs:
+      - twitch-drops-miner-tkinter
+      - twitch-drops-miner-nicegui
     if: ${{ github.event_name == 'release' }}
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: "main"
 
@@ -93,10 +136,10 @@ jobs:
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v3
+        uses: docker/setup-buildx-action@v4
 
       - name: Login to Docker Hub
-        uses: docker/login-action@v3
+        uses: docker/login-action@v4
         with:
           username: ${{ secrets.DOCKER_NAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
@@ -104,61 +147,61 @@ jobs:
       - name: Create and push multi-arch manifests
         run: |
           ARCHS=("x86_64" "aarch64")
-          TEMP_TAGS=()
-          WEBUI_TEMP_TAGS=()
+          TKINTER_TEMP_TAGS=()
+          NICEGUI_TEMP_TAGS=()
 
           for arch in "${ARCHS[@]}"; do
-            TEMP_TAGS+=("dungfu/twitch-drops-miner:temp-${arch}-${{ github.run_id }}")
-            WEBUI_TEMP_TAGS+=("dungfu/twitch-drops-miner:temp-webui-${arch}-${{ github.run_id }}")
+            TKINTER_TEMP_TAGS+=("dungfu/twitch-drops-miner:temp-tkinter-${arch}-${{ github.run_id }}")
+            NICEGUI_TEMP_TAGS+=("dungfu/twitch-drops-miner:temp-nicegui-${arch}-${{ github.run_id }}")
           done
 
           # Create version tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:${{ steps.version.outputs.version }} \
-            "${TEMP_TAGS[@]}"
+            "${TKINTER_TEMP_TAGS[@]}"
 
           # Create dev tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:16.dev \
-            "${TEMP_TAGS[@]}"
+            "${TKINTER_TEMP_TAGS[@]}"
 
           # Create latest tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:latest \
-            "${TEMP_TAGS[@]}"
+            "${TKINTER_TEMP_TAGS[@]}"
 
           # Create webui dev version tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:webui-${{ steps.version.outputs.version }} \
-            "${WEBUI_TEMP_TAGS[@]}"
+            "${NICEGUI_TEMP_TAGS[@]}"
 
           # Create webui dev tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:webui-16.dev \
-            "${WEBUI_TEMP_TAGS[@]}"
+            "${NICEGUI_TEMP_TAGS[@]}"
 
           # Create webui tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:webui \
-            "${WEBUI_TEMP_TAGS[@]}"
+            "${NICEGUI_TEMP_TAGS[@]}"
 
       - name: Clean up temp tags
         run: |
           TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "${{ secrets.DOCKER_NAME }}", "password": "${{ secrets.DOCKER_TOKEN }}"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
 
-          ARCHS=("x86_64" "aarch64" "i386" "armv7" "armv6")
+          ARCHS=("x86_64" "aarch64")
 
           for arch in "${ARCHS[@]}"; do
             curl -X DELETE \
               -H "Authorization: JWT $TOKEN" \
-              "https://hub.docker.com/v2/repositories/dungfu/twitch-drops-miner/tags/temp-${arch}-${{ github.run_id }}/"
+              "https://hub.docker.com/v2/repositories/dungfu/twitch-drops-miner/tags/temp-tkinter-${arch}-${{ github.run_id }}/"
             curl -X DELETE \
               -H "Authorization: JWT $TOKEN" \
-              "https://hub.docker.com/v2/repositories/dungfu/twitch-drops-miner/tags/temp-webui-${arch}-${{ github.run_id }}/"
+              "https://hub.docker.com/v2/repositories/dungfu/twitch-drops-miner/tags/temp-nicegui-${arch}-${{ github.run_id }}/"
           done
 
       - name: Update Docker Hub README
-        uses: peter-evans/dockerhub-description@v4
+        uses: peter-evans/dockerhub-description@v5
         with:
           username: ${{ secrets.DOCKER_NAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
