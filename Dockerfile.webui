@@ -22,7 +22,7 @@ ENV TDM_VERSION_TAG=16.dev.f045b64
 ENV UI_BACKEND=nicegui
 
 # Install runtime dependencies
-RUN apk add --no-cache ca-certificates
+RUN apk add --no-cache ca-certificates tzdata
 
 # Copy binary from build stage
 COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
