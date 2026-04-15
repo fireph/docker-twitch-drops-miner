@@ -28,7 +28,7 @@ The app can also run into issues periodically, so restarting the container daily
 > [!NOTE]
 > **🧪 Beta: WebUI Mode** - Try the new browser-based WebUI interface!
 >
-> Instead of using the desktop GUI via VNC, you can now use the experimental WebUI mode by using the `webui` tag instead of `latest`:
+> Instead of using the desktop GUI via VNC, you can now use the experimental WebUI mode by using the `webui` tag instead of `latest`.
 >
 > See [README-webui.md](README-webui.md) for documentation.
 
@@ -104,7 +104,7 @@ For a complete list of supported environment variables, see the [base image docu
 
 This image is automatically built and published to Docker Hub:
 - **Repository**: [dungfu/twitch-drops-miner](https://hub.docker.com/r/dungfu/twitch-drops-miner)
-- **Tags**: `latest`, `16.dev`, `16.dev.{version}`, `webui`, `webui-16.dev`, `webui-16.dev.{version}`
+- **Tags**: `latest`, `16.dev`, `16.dev.{version}`
 - **Architectures**: `linux/amd64`, `linux/arm64`
 
 ## 🔍 Troubleshooting

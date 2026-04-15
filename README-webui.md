@@ -29,10 +29,8 @@ A containerized version of [Twitch Drops Miner](https://github.com/fireph/Twitch
 > This is an unofficial docker image, **DO NOT** report docker issues to [DevilXD/TwitchDropsMiner](https://github.com/DevilXD/TwitchDropsMiner)
 
 > [!NOTE]
-> Looking for the desktop/tkinter version instead? Use the `latest` tag:
-> ```bash
-> dungfu/twitch-drops-miner:latest
-> ```
+> Looking for the desktop/tkinter version instead? Use the `latest` tag.
+>
 > See [README.md](README.md) for documentation.
 
 ## 🚀 Quick Start
