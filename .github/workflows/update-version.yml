@@ -13,7 +13,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           ref: "main"
 
@@ -93,7 +93,7 @@ jobs:
 
       - name: Create GitHub Release
         if: steps.update-dockerfile.outputs.changed == 'true'
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.update-dockerfile.outputs.new_version }}
           name: "v${{ steps.update-dockerfile.outputs.new_version }}"
