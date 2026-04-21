@@ -91,18 +91,46 @@ jobs:
           git commit -m "Update TDM_VERSION_TAG to ${{ steps.update-dockerfile.outputs.new_version }}"
           git push
 
+      - name: Build release notes
+        if: steps.update-dockerfile.outputs.changed == 'true'
+        run: |
+          # Extract previous commit hash from the old version tag (format: 16.dev.<hash>)
+          prev_commit="${{ steps.current-version.outputs.current_version }}"
+          prev_commit="${prev_commit##*.}"
+          new_commit="${{ steps.get-release.outputs.full_commit_hash }}"
+
+          echo "Comparing $prev_commit...$new_commit in fireph/TwitchDropsMiner"
+
+          compare_info=$(curl -s \
+            -H "Authorization: token ${{ secrets.PAT_TOKEN }}" \
+            "https://api.github.com/repos/fireph/TwitchDropsMiner/compare/${prev_commit}...${new_commit}")
+
+          commits=$(echo "$compare_info" \
+            | jq -r '.commits[]? | "- " + (.commit.message | split("\n")[0]) + " [" + .sha[:7] + "](https://github.com/fireph/TwitchDropsMiner/commit/" + .sha + ")"' 2>/dev/null || echo "")
+
+          if [ -z "$commits" ]; then
+            commits="- No new commits since last release"
+          fi
+
+          cat > /tmp/release_notes.md <<EOF
+          Updated Twitch Drops Miner to v${{ steps.update-dockerfile.outputs.new_version }}
+
+          Reference commit: https://github.com/fireph/TwitchDropsMiner/commit/${{ steps.get-release.outputs.full_commit_hash }}
+
+          Docker image at: https://hub.docker.com/r/dungfu/twitch-drops-miner
+
+          ## Changes since last release
+
+          $commits
+          EOF
+
       - name: Create GitHub Release
         if: steps.update-dockerfile.outputs.changed == 'true'
         uses: softprops/action-gh-release@v3
         with:
           tag_name: ${{ steps.update-dockerfile.outputs.new_version }}
           name: "v${{ steps.update-dockerfile.outputs.new_version }}"
-          body: |
-            Updated Twitch Drops Miner to v${{ steps.update-dockerfile.outputs.new_version }}
-
-            Reference commit: https://github.com/fireph/TwitchDropsMiner/commit/${{ steps.get-release.outputs.full_commit_hash }}
-
-            Docker image at: https://hub.docker.com/r/dungfu/twitch-drops-miner
+          body_path: /tmp/release_notes.md
           draft: false
           prerelease: false
           token: ${{ secrets.PAT_TOKEN }}
