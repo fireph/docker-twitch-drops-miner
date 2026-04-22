@@ -106,7 +106,7 @@ jobs:
             "https://api.github.com/repos/fireph/TwitchDropsMiner/compare/${prev_commit}...${new_commit}")
 
           commits=$(echo "$compare_info" \
-            | jq -r '.commits[]? | "- " + (.commit.message | split("\n")[0]) + " [" + .sha[:7] + "](https://github.com/fireph/TwitchDropsMiner/commit/" + .sha + ")"' 2>/dev/null || echo "")
+            | jq -r '.commits[]? | "- fireph/TwitchDropsMiner@" + .sha + ": " + (.commit.message | split("\n")[0])' 2>/dev/null || echo "")
 
           if [ -z "$commits" ]; then
             commits="- No new commits since last release"
@@ -119,7 +119,7 @@ jobs:
 
           Docker image at: https://hub.docker.com/r/dungfu/twitch-drops-miner
 
-          ## Changes since last release
+          ### Changelog
 
           $commits
           EOF
