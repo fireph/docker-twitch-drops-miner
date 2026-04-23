@@ -18,7 +18,7 @@ FROM alpine:latest
 LABEL maintainer="fireph"
 
 # Environment
-ENV TDM_VERSION_TAG=16.dev.ecd5b71
+ENV TDM_VERSION_TAG=16.dev.852b9a2
 ENV UI_BACKEND=nicegui
 
 # Install runtime dependencies
