@@ -40,7 +40,7 @@ A containerized version of [Twitch Drops Miner](https://github.com/fireph/Twitch
 ```bash
 docker run -d \
   --name twitch-drops-miner \
-  -p 8080:8080 \
+  -p 5800:5800 \
   -v /path/to/config:/TwitchDropsMiner/config \
   -v /path/to/cache:/TwitchDropsMiner/cache \
   -e TZ=America/New_York \
@@ -56,7 +56,7 @@ services:
     image: dungfu/twitch-drops-miner:webui
     container_name: twitch-drops-miner
     ports:
-      - "8080:8080"
+      - "5800:5800"
     volumes:
       - /path/to/config:/TwitchDropsMiner/config
       - /path/to/cache:/TwitchDropsMiner/cache
@@ -76,7 +76,7 @@ services:
 ## 🌐 Access
 
 After starting the container, access the web interface at:
-- **URL**: `http://localhost:8080`
+- **URL**: `http://localhost:5800`
 
 No VNC client needed - the WebUI works directly in your browser!
 
@@ -93,7 +93,7 @@ No VNC client needed - the WebUI works directly in your browser!
 
 ## 🔧 Configuration
 
-1. **First Run**: Access the web interface using `http://localhost:8080`
+1. **First Run**: Access the web interface using `http://localhost:5800`
 2. **Authentication**: Login through the web interface to your Twitch account to generate cookies.jar
 3. **Settings**: Modify settings in the Settings tab or in `/TwitchDropsMiner/config/settings.json`
 
@@ -129,7 +129,7 @@ cd docker-twitch-drops-miner
 docker build -f Dockerfile.webui -t dungfu/twitch-drops-miner:webui .
 
 # Run the container
-docker run -d -p 8080:8080 dungfu/twitch-drops-miner:webui
+docker run -d -p 5800:5800 dungfu/twitch-drops-miner:webui
 ```
 
 ## 🤝 Contributing

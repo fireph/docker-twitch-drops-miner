@@ -27,6 +27,6 @@ RUN apk add --no-cache ca-certificates tzdata
 # Copy binary from build stage
 COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
 
-EXPOSE 8080
+EXPOSE 5800
 
 CMD ["/TwitchDropsMiner/TwitchDropsMiner", "--stdlog"]
