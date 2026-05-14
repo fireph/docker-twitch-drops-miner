@@ -57,15 +57,15 @@ jobs:
           echo "full_commit_hash=$commit_hash" >> $GITHUB_OUTPUT
           echo "Found commit hash: $short_commit (full: $commit_hash)"
 
-      - name: Check current version in Dockerfile
+      - name: Check current version in WebUI Dockerfile
         id: current-version
         run: |
-          current_version=$(grep "ENV TDM_VERSION_TAG=" Dockerfile | cut -d'=' -f2)
+          current_version=$(grep "ENV TDM_VERSION_TAG=" Dockerfile.webui | cut -d'=' -f2)
           echo "current_version=$current_version" >> $GITHUB_OUTPUT
           echo "Current version: $current_version"
 
-      - name: Update Dockerfile if version changed
-        id: update-dockerfile
+      - name: Update Dockerfiles if version changed
+        id: update-dockerfiles
         run: |
           commit_hash="${{ steps.get-release.outputs.commit_hash }}"
           new_version="16.dev.$commit_hash"
@@ -73,7 +73,7 @@ jobs:
 
           if [ "$new_version" != "$current_version" ]; then
             echo "Version changed from $current_version to $new_version"
-            sed -i "s/ENV TDM_VERSION_TAG=.*/ENV TDM_VERSION_TAG=$new_version/" Dockerfile
+            sed -i "s/ENV TDM_VERSION_TAG=.*/ENV TDM_VERSION_TAG=$new_version/" Dockerfile.tkinter
             sed -i "s/ENV TDM_VERSION_TAG=.*/ENV TDM_VERSION_TAG=$new_version/" Dockerfile.webui
             echo "changed=true" >> $GITHUB_OUTPUT
             echo "new_version=$new_version" >> $GITHUB_OUTPUT
@@ -83,16 +83,16 @@ jobs:
           fi
 
       - name: Commit changes
-        if: steps.update-dockerfile.outputs.changed == 'true'
+        if: steps.update-dockerfiles.outputs.changed == 'true'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add Dockerfile Dockerfile.webui
-          git commit -m "Update TDM_VERSION_TAG to ${{ steps.update-dockerfile.outputs.new_version }}"
+          git add Dockerfile.tkinter Dockerfile.webui
+          git commit -m "Update TDM_VERSION_TAG to ${{ steps.update-dockerfiles.outputs.new_version }}"
           git push
 
       - name: Build release notes
-        if: steps.update-dockerfile.outputs.changed == 'true'
+        if: steps.update-dockerfiles.outputs.changed == 'true'
         run: |
           # Extract previous commit hash from the old version tag (format: 16.dev.<hash>)
           prev_commit="${{ steps.current-version.outputs.current_version }}"
@@ -113,7 +113,7 @@ jobs:
           fi
 
           cat > /tmp/release_notes.md <<EOF
-          Updated Twitch Drops Miner to v${{ steps.update-dockerfile.outputs.new_version }}
+          Updated Twitch Drops Miner to v${{ steps.update-dockerfiles.outputs.new_version }}
 
           Reference commit: https://github.com/fireph/TwitchDropsMiner/commit/${{ steps.get-release.outputs.full_commit_hash }}
 
@@ -125,11 +125,11 @@ jobs:
           EOF
 
       - name: Create GitHub Release
-        if: steps.update-dockerfile.outputs.changed == 'true'
+        if: steps.update-dockerfiles.outputs.changed == 'true'
         uses: softprops/action-gh-release@v3
         with:
-          tag_name: ${{ steps.update-dockerfile.outputs.new_version }}
-          name: "v${{ steps.update-dockerfile.outputs.new_version }}"
+          tag_name: ${{ steps.update-dockerfiles.outputs.new_version }}
+          name: "v${{ steps.update-dockerfiles.outputs.new_version }}"
           body_path: /tmp/release_notes.md
           draft: false
           prerelease: false

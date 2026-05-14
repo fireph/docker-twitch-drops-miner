@@ -30,17 +30,6 @@ jobs:
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
-      - name: Extract version from tag
-        id: version
-        run: |
-          if [ "${{ github.event_name }}" = "release" ]; then
-            VERSION=${{ github.event.release.tag_name }}
-          else
-            VERSION=$(grep "ENV TDM_VERSION_TAG=" Dockerfile | cut -d'=' -f2)
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Version: $VERSION"
-
       - name: Login to Docker Hub
         uses: docker/login-action@v4
         with:
@@ -51,7 +40,7 @@ jobs:
         uses: docker/build-push-action@v7
         with:
           context: .
-          file: Dockerfile
+          file: Dockerfile.tkinter
           platforms: ${{ matrix.platform }}
           push: ${{ github.event_name == 'release' }}
           tags: |
@@ -82,17 +71,6 @@ jobs:
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
-
-      - name: Extract version from tag
-        id: version
-        run: |
-          if [ "${{ github.event_name }}" = "release" ]; then
-            VERSION=${{ github.event.release.tag_name }}
-          else
-            VERSION=$(grep "ENV TDM_VERSION_TAG=" Dockerfile | cut -d'=' -f2)
-          fi
-          echo "version=$VERSION" >> $GITHUB_OUTPUT
-          echo "Version: $VERSION"
 
       - name: Login to Docker Hub
         uses: docker/login-action@v4
@@ -131,7 +109,7 @@ jobs:
           if [ "${{ github.event_name }}" = "release" ]; then
             VERSION=${{ github.event.release.tag_name }}
           else
-            VERSION=$(grep "ENV TDM_VERSION_TAG=" Dockerfile | cut -d'=' -f2)
+            VERSION=$(grep "ENV TDM_VERSION_TAG=" Dockerfile.webui | cut -d'=' -f2)
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
@@ -155,22 +133,22 @@ jobs:
             NICEGUI_TEMP_TAGS+=("dungfu/twitch-drops-miner:temp-nicegui-${arch}-${{ github.run_id }}")
           done
 
-          # Create version tag
+          # Create tkinter version tag
           docker buildx imagetools create \
-            -t dungfu/twitch-drops-miner:${{ steps.version.outputs.version }} \
+            -t dungfu/twitch-drops-miner:tkinter-${{ steps.version.outputs.version }} \
             "${TKINTER_TEMP_TAGS[@]}"
 
-          # Create dev tag
+          # Create tkinter dev tag
           docker buildx imagetools create \
-            -t dungfu/twitch-drops-miner:16.dev \
+            -t dungfu/twitch-drops-miner:tkinter-16.dev \
             "${TKINTER_TEMP_TAGS[@]}"
 
-          # Create latest tag
+          # Create tkinter tag
           docker buildx imagetools create \
-            -t dungfu/twitch-drops-miner:latest \
+            -t dungfu/twitch-drops-miner:tkinter \
             "${TKINTER_TEMP_TAGS[@]}"
 
-          # Create webui dev version tag
+          # Create webui version tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:webui-${{ steps.version.outputs.version }} \
             "${NICEGUI_TEMP_TAGS[@]}"
@@ -183,6 +161,21 @@ jobs:
           # Create webui tag
           docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:webui \
+            "${NICEGUI_TEMP_TAGS[@]}"
+
+          # Create version tag
+          docker buildx imagetools create \
+            -t dungfu/twitch-drops-miner:${{ steps.version.outputs.version }} \
+            "${NICEGUI_TEMP_TAGS[@]}"
+
+          # Create dev tag
+          docker buildx imagetools create \
+            -t dungfu/twitch-drops-miner:16.dev \
+            "${NICEGUI_TEMP_TAGS[@]}"
+
+          # Create latest tag
+          docker buildx imagetools create \
+            -t dungfu/twitch-drops-miner:latest \
             "${NICEGUI_TEMP_TAGS[@]}"
 
       - name: Clean up temp tags
