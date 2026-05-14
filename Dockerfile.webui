@@ -20,13 +20,19 @@ LABEL maintainer="fireph"
 # Environment
 ENV TDM_VERSION_TAG=16.dev.8c3da48
 ENV UI_BACKEND=nicegui
+ENV USER_ID=1000
+ENV GROUP_ID=1000
 
 # Install runtime dependencies
-RUN apk add --no-cache ca-certificates tzdata
+RUN apk add --no-cache ca-certificates tzdata su-exec
 
 # Copy binary from build stage
 COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
 
+# Copy entrypoint script
+COPY entrypoint-webui.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
 EXPOSE 5800
 
-CMD ["/TwitchDropsMiner/TwitchDropsMiner", "--stdlog"]
+ENTRYPOINT ["/entrypoint.sh"]
