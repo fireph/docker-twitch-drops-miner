@@ -4,7 +4,7 @@
 
 # Docker Twitch Drops Miner
 
-An unofficial Docker container for automatically mining Twitch drops with a native web-based interface (WebUI).
+An unofficial Docker container for automatically mining Twitch drops with a native web-based interface.
 
 ![Docker Pulls](https://img.shields.io/docker/pulls/dungfu/twitch-drops-miner?style=flat-square)
 ![Docker Stars](https://img.shields.io/docker/stars/dungfu/twitch-drops-miner?style=flat-square)
