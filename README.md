@@ -41,6 +41,7 @@ A containerized version of [Twitch Drops Miner](https://github.com/fireph/Twitch
 docker run -d \
   --name twitch-drops-miner \
   -p 5800:5800 \
+  -u 1000:1000 \
   -v /path/to/config:/TwitchDropsMiner/config \
   -v /path/to/cache:/TwitchDropsMiner/cache \
   -e TZ=America/New_York \
@@ -56,6 +57,7 @@ services:
     container_name: twitch-drops-miner
     ports:
       - "5800:5800"
+    user: "1000:1000"
     volumes:
       - /path/to/config:/TwitchDropsMiner/config
       - /path/to/cache:/TwitchDropsMiner/cache
@@ -84,9 +86,15 @@ No VNC client needed - the WebUI works directly in your browser!
 
 | Variable | Description | Default |
 |----------|-------------|---------|
-| `USER_ID` | User ID for file permissions | `1000` |
-| `GROUP_ID` | Group ID for file permissions | `1000` |
 | `TZ` | Timezone for the container | `UTC` |
+| `USER_ID` | User ID for file permissions (fallback, see below) | `1000` |
+| `GROUP_ID` | Group ID for file permissions (fallback, see below) | `1000` |
+
+### User and File Permissions
+
+The recommended way to set the user/group for the container is using Docker's `--user` / `user` option (e.g., `-u 1000:1000` in `docker run` or `user: "1000:1000"` in Docker Compose). This runs the container as a non-root user from the start, which is more secure and avoids the need for the entrypoint to create a user at runtime.
+
+The `USER_ID` and `GROUP_ID` environment variables are a fallback mechanism for backward compatibility. They are only used when the container runs as root (i.e., without `--user`), in which case the entrypoint creates a user/group with the specified IDs and drops privileges to that user before starting the application. If you use `--user`, these variables are ignored.
 
 ## 🔧 Configuration
 
@@ -105,7 +113,7 @@ This image is automatically built and published to Docker Hub:
 
 ### Permissions issues on mounted volumes
 
-If you are running into permissions issues, make sure the user (e.g., uid 1000/gid 1000) has read/write permissions on your mounted directory. If you don't want to worry about users, `chmod -R 777` on your mounted directory will fix the problem as well.
+If you are running into permissions issues, make sure the user (e.g., uid 1000/gid 1000) has read/write permissions on your mounted directory. The recommended approach is to pass `-u <uid>:<gid>` to `docker run` (or `user: "<uid>:<gid>"` in Docker Compose) to match the host user. If you don't want to worry about users, `chmod -R 777` on your mounted directory will fix the problem as well.
 
 ### Cannot connect to Twitch / Login not working
 
