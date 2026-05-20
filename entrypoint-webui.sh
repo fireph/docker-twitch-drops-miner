@@ -7,7 +7,16 @@ fi
 USER_ID=${USER_ID:-1000}
 GROUP_ID=${GROUP_ID:-1000}
 
-addgroup -g "$GROUP_ID" -S app
-adduser -u "$USER_ID" -G app -S -H -D app
+GROUP_NAME=$(awk -F: -v gid="$GROUP_ID" '$3 == gid {print $1}' /etc/group)
+if [ -z "$GROUP_NAME" ]; then
+    addgroup -g "$GROUP_ID" -S app
+    GROUP_NAME=app
+fi
 
-exec su-exec app /TwitchDropsMiner/TwitchDropsMiner --stdlog
+USER_NAME=$(awk -F: -v uid="$USER_ID" '$3 == uid {print $1}' /etc/passwd)
+if [ -z "$USER_NAME" ]; then
+    adduser -u "$USER_ID" -G "$GROUP_NAME" -S -H -D app
+    USER_NAME=app
+fi
+
+exec su-exec "$USER_NAME" /TwitchDropsMiner/TwitchDropsMiner --stdlog
