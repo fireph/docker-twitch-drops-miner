@@ -87,6 +87,8 @@ No VNC client needed - the WebUI works directly in your browser!
 | Variable | Description | Default |
 |----------|-------------|---------|
 | `TZ` | Timezone for the container | `UTC` |
+| `WEBUI_HOST` | Host address the web UI binds to | `0.0.0.0` |
+| `WEBUI_PORT` | Port the web UI listens on | `5800` |
 | `USER_ID` | User ID for file permissions (fallback, see below) | `1000` |
 | `GROUP_ID` | Group ID for file permissions (fallback, see below) | `1000` |
 
