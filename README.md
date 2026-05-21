@@ -117,6 +117,29 @@ This image is automatically built and published to Docker Hub:
 
 If you are running into permissions issues, make sure the user (e.g., uid 1000/gid 1000) has read/write permissions on your mounted directory. The recommended approach is to pass `-u <uid>:<gid>` to `docker run` (or `user: "<uid>:<gid>"` in Docker Compose) to match the host user. If you don't want to worry about users, `chmod -R 777` on your mounted directory will fix the problem as well.
 
+### Reverse proxy and WebSocket support
+
+The web interface uses WebSockets. If you are running behind a reverse proxy, make sure WebSocket connections are forwarded properly.
+
+**HAProxy** — add the following to your frontend/backend section:
+
+```
+option http-server-close
+timeout tunnel 1h
+```
+
+`option http-server-close` allows HAProxy to detect the `Upgrade: websocket` header and switch to tunnel mode, and `timeout tunnel 1h` prevents the proxy from closing long-lived WebSocket connections prematurely.
+
+**Nginx** — ensure your location block includes:
+
+```nginx
+proxy_set_header Upgrade $http_upgrade;
+proxy_set_header Connection "upgrade";
+proxy_read_timeout 1h;
+```
+
+The `Upgrade` and `Connection` headers enable the WebSocket handshake, and `proxy_read_timeout 1h` prevents the proxy from closing long-lived WebSocket connections prematurely.
+
 ### Cannot connect to Twitch / Login not working
 
 If the app can find channels but fails to connect to streams, or if login resets after entering the token, your DNS-level ad blocker may be the cause.
