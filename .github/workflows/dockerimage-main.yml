@@ -36,6 +36,12 @@ jobs:
           username: ${{ secrets.DOCKER_NAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: dungfu/twitch-drops-miner
+
       - name: Build and push tinkter temp tags
         uses: docker/build-push-action@v7
         with:
@@ -45,6 +51,7 @@ jobs:
           push: ${{ github.event_name == 'release' }}
           tags: |
             dungfu/twitch-drops-miner:temp-tkinter-${{ matrix.arch }}-${{ github.run_id }}
+          labels: ${{ steps.meta.outputs.labels }}
           pull: true
           no-cache: true
 
@@ -78,6 +85,12 @@ jobs:
           username: ${{ secrets.DOCKER_NAME }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: dungfu/twitch-drops-miner
+
       - name: Build and push nicegui temp tags
         uses: docker/build-push-action@v7
         with:
@@ -87,6 +100,7 @@ jobs:
           push: ${{ github.event_name == 'release' }}
           tags: |
             dungfu/twitch-drops-miner:temp-nicegui-${{ matrix.arch }}-${{ github.run_id }}
+          labels: ${{ steps.meta.outputs.labels }}
           pull: true
           no-cache: true
 
@@ -113,6 +127,12 @@ jobs:
           fi
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Extract Docker metadata for Manifest Index
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: dungfu/twitch-drops-miner
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v4
 
@@ -133,48 +153,29 @@ jobs:
             NICEGUI_TEMP_TAGS+=("dungfu/twitch-drops-miner:temp-nicegui-${arch}-${{ github.run_id }}")
           done
 
+          ANNOTATION_ARGS=()
+          while IFS= read -r line; do
+            if [ -n "$line" ]; then
+              ANNOTATION_ARGS+=("--annotation" "$line")
+            fi
+          done <<< "${{ steps.meta.outputs.annotations }}"
+
           # Create tkinter version tag
           docker buildx imagetools create \
+            "${ANNOTATION_ARGS[@]}" \
             -t dungfu/twitch-drops-miner:tkinter-${{ steps.version.outputs.version }} \
-            "${TKINTER_TEMP_TAGS[@]}"
-
-          # Create tkinter dev tag
-          docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:tkinter-16.dev \
-            "${TKINTER_TEMP_TAGS[@]}"
-
-          # Create tkinter tag
-          docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:tkinter \
             "${TKINTER_TEMP_TAGS[@]}"
 
           # Create webui version tag
           docker buildx imagetools create \
+            "${ANNOTATION_ARGS[@]}" \
             -t dungfu/twitch-drops-miner:webui-${{ steps.version.outputs.version }} \
-            "${NICEGUI_TEMP_TAGS[@]}"
-
-          # Create webui dev tag
-          docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:webui-16.dev \
-            "${NICEGUI_TEMP_TAGS[@]}"
-
-          # Create webui tag
-          docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:webui \
-            "${NICEGUI_TEMP_TAGS[@]}"
-
-          # Create version tag
-          docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:${{ steps.version.outputs.version }} \
-            "${NICEGUI_TEMP_TAGS[@]}"
-
-          # Create dev tag
-          docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:16.dev \
-            "${NICEGUI_TEMP_TAGS[@]}"
-
-          # Create latest tag
-          docker buildx imagetools create \
             -t dungfu/twitch-drops-miner:latest \
             "${NICEGUI_TEMP_TAGS[@]}"
 
