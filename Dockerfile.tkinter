@@ -15,7 +15,10 @@ RUN apk add --no-cache ca-certificates wget unzip && \
 # Final image
 FROM jlesage/baseimage-gui:alpine-3.23-v4
 
-LABEL maintainer="fireph"
+LABEL org.opencontainers.image.authors="fireph" \
+      org.opencontainers.image.title="Twitch Drops Miner (Tkinter)" \
+      org.opencontainers.image.description="A Dockerized miner for Twitch Drops featuring the Tkinter desktop UI" \
+      org.opencontainers.image.source="https://github.com/fireph/docker-twitch-drops-miner"
 
 # Environment
 ENV ENABLE_CJK_FONT=1
