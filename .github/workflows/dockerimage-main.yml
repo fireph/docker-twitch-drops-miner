@@ -155,7 +155,7 @@ jobs:
 
           ANNOTATION_ARGS=()
           while IFS= read -r line; do
-            if [ -n "$line" ]; then
+            if [ -n "$line" ] && [[ "$line" != manifest:* ]]; then
               ANNOTATION_ARGS+=("--annotation" "$line")
             fi
           done <<< "${{ steps.meta.outputs.annotations }}"
