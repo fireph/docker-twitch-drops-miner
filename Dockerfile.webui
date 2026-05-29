@@ -21,7 +21,7 @@ LABEL org.opencontainers.image.authors="fireph" \
       org.opencontainers.image.source="https://github.com/fireph/docker-twitch-drops-miner"
 
 # Environment
-ENV TDM_VERSION_TAG=16.dev.f87d984
+ENV TDM_VERSION_TAG=16.dev.5272083
 ENV UI_BACKEND=nicegui
 ENV USER_ID=1000
 ENV GROUP_ID=1000
