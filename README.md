@@ -76,7 +76,8 @@ services:
 ## 🌐 Access
 
 After starting the container, access the web interface at:
-- **URL**: `http://localhost:5800`
+- **HTTP**: `http://localhost:5800`
+- **HTTPS** (with `SECURE_CONNECTION=1`): `https://localhost:5800`
 
 No VNC client needed - the WebUI works directly in your browser!
 
@@ -90,6 +91,7 @@ No VNC client needed - the WebUI works directly in your browser!
 | `WEBUI_HOST` | Host address the web UI binds to | `0.0.0.0` |
 | `WEBUI_PORT` | Port the web UI listens on | `5800` |
 | `WEBUI_AUTH` | Enable authentication for the web UI (`0` = disabled, `1` = enabled) | `0` |
+| `SECURE_CONNECTION` | Enable HTTPS (`0` = disabled, `1` = enabled) See [Security](#-security) | `0` |
 | `USER_ID` | User ID for file permissions (fallback, see below) | `1000` |
 | `GROUP_ID` | Group ID for file permissions (fallback, see below) | `1000` |
 
@@ -148,6 +150,24 @@ If the app can find channels but fails to connect to streams, or if login resets
 **AdGuard, Pi-hole, and similar tools** can block `beacon.twitch.tv`, which is required for the app to function correctly. To fix this, whitelist `beacon.twitch.tv` in your ad blocker.
 
 See [issue #38](https://github.com/fireph/docker-twitch-drops-miner/issues/38) for more details.
+
+## 🔒 Security
+
+### HTTPS Support
+
+The WebUI can be served over HTTPS by setting `SECURE_CONNECTION=1`. When enabled:
+
+- Certificates are read from `config/certs/`:
+  - `web-privkey.pem` — Web server's private key
+  - `web-fullchain.pem` — Web server's certificate, bundled with any root and intermediate certificates
+- If either file is missing, a **self-signed certificate** is automatically generated and written to those paths
+- Self-signed certificates include `localhost` and `127.0.0.1` as Subject Alternative Names, plus the container hostname and its resolved IP when running in Docker with `--hostname`
+
+To use your own certificates, place your certificate files at `/path/to/config/certs/web-privkey.pem` and `/path/to/config/certs/web-fullchain.pem`.
+
+### Authentication
+
+The WebUI supports basic authentication via `WEBUI_AUTH=1`. When enabled, a username and password are required to access the interface. For maximum security, use both HTTPS and authentication together.
 
 ## 🏗️ Building from Source
 
