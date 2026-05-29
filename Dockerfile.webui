@@ -27,7 +27,7 @@ ENV USER_ID=1000
 ENV GROUP_ID=1000
 
 # Install runtime dependencies
-RUN apk add --no-cache ca-certificates tzdata su-exec
+RUN apk add --no-cache ca-certificates tzdata su-exec openssl
 
 # Copy binary from build stage
 COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
