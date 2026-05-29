@@ -90,7 +90,7 @@ No VNC client needed - the WebUI works directly in your browser!
 | `TZ` | Timezone for the container | `UTC` |
 | `WEBUI_HOST` | Host address the web UI binds to | `0.0.0.0` |
 | `WEBUI_PORT` | Port the web UI listens on | `5800` |
-| `WEBUI_AUTH` | Enable authentication for the web UI (`0` = disabled, `1` = enabled)<br>See [Authentication](#-authentication) | `0` |
+| `WEBUI_AUTH` | Enable authentication for the web UI (`0` = disabled, `1` = enabled)<br>See [Authentication](#authentication) | `0` |
 | `SECURE_CONNECTION` | Enable HTTPS (`0` = disabled, `1` = enabled)<br>See [Security](#-security) | `0` |
 | `USER_ID` | User ID for file permissions (fallback, see below) | `1000` |
 | `GROUP_ID` | Group ID for file permissions (fallback, see below) | `1000` |
