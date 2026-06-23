@@ -6,13 +6,16 @@
 
 An unofficial Docker container for automatically mining Twitch drops with a native web-based interface.
 
-![Docker Pulls](https://img.shields.io/docker/pulls/dungfu/twitch-drops-miner?style=flat-square)
-![Docker Stars](https://img.shields.io/docker/stars/dungfu/twitch-drops-miner?style=flat-square)
-![Docker Image Size](https://img.shields.io/docker/image-size/dungfu/twitch-drops-miner/latest)
-![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/fireph/docker-twitch-drops-miner/dockerimage-main.yml?style=flat-square)
+[![GitHub Stars](https://img.shields.io/github/stars/fireph/docker-twitch-drops-miner?style=for-the-badge&color=gold&logo=github&logoColor=white)](https://github.com/fireph/docker-twitch-drops-miner/stargazers)
 
-[![Docker Hub](https://img.shields.io/badge/Open%20On-DockerHub-blue?style=for-the-badge&logo=docker)](https://hub.docker.com/r/dungfu/twitch-drops-miner)
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github)](https://github.com/fireph/docker-twitch-drops-miner)
+
+![Docker Pulls](https://img.shields.io/docker/pulls/dungfu/twitch-drops-miner?style=for-the-badge&logo=docker)
+![Docker Stars](https://img.shields.io/docker/stars/dungfu/twitch-drops-miner?style=for-the-badge&logo=docker)
+![Docker Image Size](https://img.shields.io/docker/image-size/dungfu/twitch-drops-miner/latest?style=for-the-badge&logo=docker)
+![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/fireph/docker-twitch-drops-miner/dockerimage-main.yml?style=for-the-badge&logo=workflow&logoColor=white)
+
+[![Docker Hub](https://img.shields.io/badge/Open%20On-DockerHub-7d46ff?style=for-the-badge&logo=docker)](https://hub.docker.com/r/dungfu/twitch-drops-miner)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-7d46ff?style=for-the-badge&logo=github)](https://github.com/fireph/docker-twitch-drops-miner)
 
 </div>
 
@@ -190,3 +193,15 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 ## 📜 License
 
 This project is licensed under the MIT License.
+
+## 💫 Star History
+
+<div align="center">
+<a href="https://www.star-history.com/?repos=fireph%2Fdocker-twitch-drops-miner&type=date&legend=top-left">
+ <picture>
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&theme=dark&legend=top-left" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&legend=top-left" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&legend=top-left" />
+ </picture>
+</a>
+</div>
