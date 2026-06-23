@@ -8,7 +8,6 @@ An unofficial Docker container for automatically mining Twitch drops with a nati
 
 [![GitHub Stars](https://img.shields.io/github/stars/fireph/docker-twitch-drops-miner?style=for-the-badge&color=gold&logo=github&logoColor=white)](https://github.com/fireph/docker-twitch-drops-miner/stargazers)
 
-
 ![Docker Pulls](https://img.shields.io/docker/pulls/dungfu/twitch-drops-miner?style=for-the-badge&logo=docker)
 ![Docker Stars](https://img.shields.io/docker/stars/dungfu/twitch-drops-miner?style=for-the-badge&logo=docker)
 ![Docker Image Size](https://img.shields.io/docker/image-size/dungfu/twitch-drops-miner/latest?style=for-the-badge&logo=docker)
@@ -16,6 +15,7 @@ An unofficial Docker container for automatically mining Twitch drops with a nati
 
 [![Docker Hub](https://img.shields.io/badge/Open%20On-DockerHub-7d46ff?style=for-the-badge&logo=docker)](https://hub.docker.com/r/dungfu/twitch-drops-miner)
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-7d46ff?style=for-the-badge&logo=github)](https://github.com/fireph/docker-twitch-drops-miner)
+[![Latest Release](https://img.shields.io/github/v/release/fireph/docker-twitch-drops-miner?style=for-the-badge&logo=github&logoColor=white&color=7d46ff&label=Latest%20Release)](https://github.com/fireph/docker-twitch-drops-miner/releases/latest)
 
 </div>
 
