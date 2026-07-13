@@ -199,9 +199,9 @@ This project is licensed under the MIT License.
 <div align="center">
 <a href="https://www.star-history.com/?repos=fireph%2Fdocker-twitch-drops-miner&type=date&legend=top-left">
  <picture>
-   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&theme=dark&legend=top-left" />
-   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&legend=top-left" />
-   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&legend=top-left" />
+   <source media="(prefers-color-scheme: dark)" srcset="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&theme=dark&legend=top-left&sealed_token=p51kvU4Kkjm1j1A5mZNee7gSl2sR48eXpFKqVftMs3vED-jQMkdoRS4LqdR-xiO1q3krODERVH29TIuzi8Z_dB0uS6HIQGzwF1CLUn40QqwiBhadNs9U0JfvjqYkZI4ppjnC5u07G2uiL6e3i6K7cuwXOrxB8vQ4OQEZm2Fl0uvDrv2E4Fp38EioMNBk" />
+   <source media="(prefers-color-scheme: light)" srcset="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&legend=top-left&sealed_token=p51kvU4Kkjm1j1A5mZNee7gSl2sR48eXpFKqVftMs3vED-jQMkdoRS4LqdR-xiO1q3krODERVH29TIuzi8Z_dB0uS6HIQGzwF1CLUn40QqwiBhadNs9U0JfvjqYkZI4ppjnC5u07G2uiL6e3i6K7cuwXOrxB8vQ4OQEZm2Fl0uvDrv2E4Fp38EioMNBk" />
+   <img alt="Star History Chart" src="https://api.star-history.com/chart?repos=fireph/docker-twitch-drops-miner&type=date&legend=top-left&sealed_token=p51kvU4Kkjm1j1A5mZNee7gSl2sR48eXpFKqVftMs3vED-jQMkdoRS4LqdR-xiO1q3krODERVH29TIuzi8Z_dB0uS6HIQGzwF1CLUn40QqwiBhadNs9U0JfvjqYkZI4ppjnC5u07G2uiL6e3i6K7cuwXOrxB8vQ4OQEZm2Fl0uvDrv2E4Fp38EioMNBk" />
  </picture>
 </a>
 </div>
