@@ -118,9 +118,34 @@ If you are running into permissions issues, make sure the user (default: uid 100
 
 If the app can find channels but fails to connect to streams, or if login resets after entering the token, your DNS-level ad blocker may be the cause.
 
-**AdGuard, Pi-hole, and similar tools** can block `beacon.twitch.tv`, which is required for the app to function correctly. To fix this, whitelist `beacon.twitch.tv` in your ad blocker.
+Twitch Drops Miner requires access to `beacon.twitch.tv` and `spade.twitch.tv` to function, and those are often blocked by tracking filters.
+If you use AdGuard, Pi-hole or similar tools, add `beacon.twitch.tv` and `spade.twitch.tv` to their allow list to fix the issue.
+
+Another solution is to force Docker Twitch Drops Miner to use a DNS resolver that does not block trackers by adding a `dns` entry to the Docker Compose.
+This example below uses [Quad9](https://quad9.net/service/service-addresses-and-features/), which only blocks malware and allows all the `twitch.tv` subdomains.
+
+```yaml
+services:
+  twitch-drops-miner:
+    image: dungfu/twitch-drops-miner:tkinter
+    container_name: twitch-drops-miner
+    ports:
+      - "5800:5800"
+    volumes:
+      - /path/to/config:/TwitchDropsMiner/config
+      - /path/to/cache:/TwitchDropsMiner/cache
+    environment:
+      - USER_ID=1000
+      - GROUP_ID=1000
+      - TZ=America/New_York
+    restart: unless-stopped
+    dns:
+      - 9.9.9.9
+      - 149.112.112.112
+```
 
 See [issue #38](https://github.com/fireph/docker-twitch-drops-miner/issues/38) for more details.
+`spade.twitch.tv` is blocked by [AdGuard's tracking filter](https://github.com/AdguardTeam/AdguardFilters/blob/master/SpywareFilter/sections/tracking_servers_firstparty.txt).
 
 ## 🏗️ Building from Source
 
