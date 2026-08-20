@@ -18,7 +18,8 @@ FROM alpine:latest
 LABEL org.opencontainers.image.authors="fireph" \
       org.opencontainers.image.title="Twitch Drops Miner (WebUI)" \
       org.opencontainers.image.description="A Dockerized miner for Twitch Drops featuring the NiceGUI web interface" \
-      org.opencontainers.image.source="https://github.com/fireph/docker-twitch-drops-miner"
+      org.opencontainers.image.source="https://github.com/fireph/docker-twitch-drops-miner" \
+      autoheal=true
 
 # Environment
 ENV TDM_VERSION_TAG=16.dev.058d790
@@ -27,7 +28,7 @@ ENV USER_ID=1000
 ENV GROUP_ID=1000
 
 # Install runtime dependencies
-RUN apk add --no-cache ca-certificates tzdata su-exec openssl
+RUN apk add --no-cache ca-certificates tzdata su-exec openssl curl
 
 # Copy binary from build stage
 COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
@@ -37,5 +38,9 @@ COPY entrypoint-webui.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 EXPOSE 5800
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD sh -c 'protocol=http; [ "${SECURE_CONNECTION:-0}" = "1" ] && protocol=https; \
+        curl -kfs --max-time 10 -o /dev/null "${protocol}://127.0.0.1:${WEBUI_PORT:-5800}/health"'
 
 ENTRYPOINT ["/entrypoint.sh"]

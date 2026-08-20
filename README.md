@@ -104,6 +104,39 @@ The recommended way to set the user/group for the container is using Docker's `-
 
 The `USER_ID` and `GROUP_ID` environment variables are a fallback mechanism for backward compatibility. They are only used when the container runs as root (i.e., without `--user`), in which case the entrypoint creates a user/group with the specified IDs and drops privileges to that user before starting the application. If you use `--user`, these variables are ignored.
 
+## ❤️ Health Monitoring & Auto-Restart
+
+The image includes a Docker `HEALTHCHECK` that polls the app's `/health` endpoint every 30 seconds and marks the container **unhealthy** if it stops returning an HTTP 200 response. It respects `WEBUI_PORT` and `SECURE_CONNECTION` automatically.
+
+To automatically restart the app, pair it with [autoheal](https://github.com/willfarrell/docker-autoheal).
+
+### Docker Compose
+
+```yaml
+services:
+  twitch-drops-miner:
+    image: dungfu/twitch-drops-miner:latest
+    container_name: twitch-drops-miner
+    ports:
+      - "5800:5800"
+    user: "1000:1000"
+    volumes:
+      - /path/to/config:/TwitchDropsMiner/config
+      - /path/to/cache:/TwitchDropsMiner/cache
+    environment:
+      - TZ=America/New_York
+    restart: unless-stopped
+
+  autoheal:
+    image: willfarrell/autoheal
+    container_name: autoheal
+    environment:
+      - AUTOHEAL_CONTAINER_LABEL=autoheal
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+```
+
 ## 🔧 Configuration
 
 1. **First Run**: Access the web interface using `http://localhost:5800`
