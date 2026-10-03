@@ -84,6 +84,12 @@ After starting the container, access the web interface at:
 
 No VNC client needed - the WebUI works directly in your browser!
 
+### Twitch Login
+
+Click **Login** to open Twitch in the embedded Chromium browser and enter your password and verification code there. The application starts the browser and virtual display only during login and closes them when the attempt finishes or is cancelled. Existing valid saved logins are reused.
+
+The noVNC viewer uses the same WebUI port (`5800` by default), including HTTPS when enabled. No additional VNC port needs to be published. Reverse proxies must also forward WebSockets for `/browser-login/socket/`.
+
 ## ⚙️ Environment Variables
 
 ### Basic Configuration
@@ -140,7 +146,7 @@ services:
 ## 🔧 Configuration
 
 1. **First Run**: Access the web interface using `http://localhost:5800`
-2. **Authentication**: Login through the web interface to your Twitch account to generate cookies.jar
+2. **Authentication**: Click **Login** and sign in through the embedded Twitch browser to generate cookies.jar
 3. **Settings**: Modify settings in the Settings tab or in `/TwitchDropsMiner/config/settings.json`
 
 ## 🐳 Docker Hub

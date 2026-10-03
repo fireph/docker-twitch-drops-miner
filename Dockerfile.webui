@@ -22,13 +22,29 @@ LABEL org.opencontainers.image.authors="fireph" \
       autoheal=true
 
 # Environment
-ENV TDM_VERSION_TAG=16.dev.c8a9bac
+ENV TDM_VERSION_TAG=16.dev.8a13ef5
 ENV UI_BACKEND=nicegui
+ENV WEBUI_HOST=0.0.0.0
 ENV USER_ID=1000
 ENV GROUP_ID=1000
 
-# Install runtime dependencies
-RUN apk add --no-cache ca-certificates tzdata su-exec openssl curl
+# Chromium needs writable paths even when --user specifies a UID without a home.
+ENV XDG_CONFIG_HOME=/tmp/.config
+ENV XDG_CACHE_HOME=/tmp/.cache
+# Docker's default restrictions prevent Chromium from creating sandbox namespaces.
+ENV CHROMIUM_USER_FLAGS=--no-sandbox
+
+RUN apk add --no-cache \
+    ca-certificates \
+    tzdata \
+    su-exec \
+    openssl \
+    curl \
+    chromium \
+    xvfb \
+    x11vnc \
+    novnc \
+    font-dejavu
 
 # Copy binary from build stage
 COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
