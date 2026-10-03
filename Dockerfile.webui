@@ -22,7 +22,7 @@ LABEL org.opencontainers.image.authors="fireph" \
       autoheal=true
 
 # Environment
-ENV TDM_VERSION_TAG=16.dev.8a13ef5
+ENV TDM_VERSION_TAG=16.dev.8cf46c2
 ENV UI_BACKEND=nicegui
 ENV WEBUI_HOST=0.0.0.0
 ENV USER_ID=1000
