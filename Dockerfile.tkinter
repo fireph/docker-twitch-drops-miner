@@ -1,19 +1,20 @@
 # Download stage
-FROM alpine:latest AS downloader
+FROM debian:bookworm-slim AS downloader
 ARG TARGETARCH
-ARG TARGETVARIANT
-RUN apk add --no-cache ca-certificates wget unzip && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates wget unzip && \
+    rm -rf /var/lib/apt/lists/* && \
     case ${TARGETARCH} in \
       "amd64") ARCH_SUFFIX="x86_64" ;; \
       "arm64") ARCH_SUFFIX="aarch64" ;; \
       *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
     esac && \
-    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.musl.PyInstaller-tkinter-${ARCH_SUFFIX}.zip && \
-    unzip -p /tmp/Twitch.Drops.Miner.Linux.musl.PyInstaller-tkinter-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner && \
+    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.glibc.PyInstaller-tkinter-${ARCH_SUFFIX}.zip && \
+    unzip -p /tmp/Twitch.Drops.Miner.Linux.glibc.PyInstaller-tkinter-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner && \
     chmod +x /TwitchDropsMiner
 
 # Final image
-FROM jlesage/baseimage-gui:alpine-3.23-v4
+FROM jlesage/baseimage-gui:debian-12-v4
 
 LABEL org.opencontainers.image.authors="fireph" \
       org.opencontainers.image.title="Twitch Drops Miner (Tkinter)" \
@@ -24,21 +25,40 @@ LABEL org.opencontainers.image.authors="fireph" \
 ENV ENABLE_CJK_FONT=1
 ENV DARK_MODE=1
 ENV KEEP_APP_RUNNING=1
-ENV TDM_VERSION_TAG=16.dev.dd3659c
+ENV TDM_VERSION_TAG=16.dev.6c9254f
 ENV APP_ICON_URL=https://raw.githubusercontent.com/DevilXD/TwitchDropsMiner/master/appimage/pickaxe.png
 
 # Copy fonts needed for emojis
 COPY ./fonts/ /usr/share/fonts/
 
-# Install runtime dependencies
-RUN apk add --no-cache \
+# The base image's helper initializes the users/groups needed by Debian packages.
+RUN add-pkg \
     ca-certificates \
+    curl \
     fontconfig \
-    font-dejavu \
-    brotli-libs \
-    libx11 \
-    libxrender && \
+    fonts-dejavu-core \
+    libbrotli1 \
+    libx11-6 \
+    libx11-xcb1 \
+    libxrender1 && \
+    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub \
+        -o /usr/share/keyrings/google-chrome.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.asc] https://dl.google.com/linux/chrome/deb/ stable main" \
+        > /etc/apt/sources.list.d/google-chrome.list && \
+    add-pkg google-chrome-stable && \
     fc-cache -fv
+
+# Preserve Chrome's D-Bus account when the base regenerates users at startup.
+# Debian's package manager needs this group for its file ownership overrides.
+RUN mkdir -p /etc/cont-groups.d/messagebus /etc/cont-users.d/messagebus && \
+    id -g messagebus > /etc/cont-groups.d/messagebus/id && \
+    id -u messagebus > /etc/cont-users.d/messagebus/id && \
+    id -g messagebus > /etc/cont-users.d/messagebus/gid
+
+# The desktop login flow discovers Chrome automatically.
+COPY --chmod=755 chrome-wrapper.sh /usr/local/bin/google-chrome
+RUN ln -sf /usr/local/bin/google-chrome /usr/bin/google-chrome && \
+    ln -sf /usr/local/bin/google-chrome /usr/bin/google-chrome-stable
 
 # Copy binary from build stage
 COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner

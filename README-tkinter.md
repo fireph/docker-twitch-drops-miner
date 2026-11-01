@@ -155,7 +155,7 @@ git clone https://github.com/fireph/docker-twitch-drops-miner.git
 cd docker-twitch-drops-miner
 
 # Build the image
-docker build -t dungfu/twitch-drops-miner:tkinter .
+docker build -f Dockerfile.tkinter -t dungfu/twitch-drops-miner:tkinter .
 
 # Run the container
 docker run -d -p 5800:5800 dungfu/twitch-drops-miner:tkinter

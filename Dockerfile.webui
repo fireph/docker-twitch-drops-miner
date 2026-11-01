@@ -1,19 +1,20 @@
 # Download stage
-FROM alpine:latest AS downloader
+FROM debian:bookworm-slim AS downloader
 ARG TARGETARCH
-ARG TARGETVARIANT
-RUN apk add --no-cache ca-certificates wget unzip && \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates wget unzip && \
+    rm -rf /var/lib/apt/lists/* && \
     case ${TARGETARCH} in \
       "amd64") ARCH_SUFFIX="x86_64" ;; \
       "arm64") ARCH_SUFFIX="aarch64" ;; \
       *) echo "Unsupported architecture: ${TARGETARCH}" && exit 1 ;; \
     esac && \
-    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.musl.PyInstaller-nicegui-${ARCH_SUFFIX}.zip && \
-    unzip -p /tmp/Twitch.Drops.Miner.Linux.musl.PyInstaller-nicegui-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner && \
+    wget -P /tmp/ https://github.com/fireph/TwitchDropsMiner/releases/download/dev-build/Twitch.Drops.Miner.Linux.glibc.PyInstaller-nicegui-${ARCH_SUFFIX}.zip && \
+    unzip -p /tmp/Twitch.Drops.Miner.Linux.glibc.PyInstaller-nicegui-${ARCH_SUFFIX}.zip "Twitch Drops Miner/Twitch Drops Miner (by DevilXD)" >/TwitchDropsMiner && \
     chmod +x /TwitchDropsMiner
 
 # Final image
-FROM alpine:latest
+FROM debian:bookworm-slim
 
 LABEL org.opencontainers.image.authors="fireph" \
       org.opencontainers.image.title="Twitch Drops Miner (WebUI)" \
@@ -22,29 +23,42 @@ LABEL org.opencontainers.image.authors="fireph" \
       autoheal=true
 
 # Environment
-ENV TDM_VERSION_TAG=16.dev.dd3659c
+ENV TDM_VERSION_TAG=16.dev.6c9254f
 ENV UI_BACKEND=nicegui
 ENV WEBUI_HOST=0.0.0.0
+ENV WEBUI_BROWSER_PATH=/usr/bin/google-chrome-stable
 ENV USER_ID=1000
 ENV GROUP_ID=1000
 
-# Chromium needs writable paths even when --user specifies a UID without a home.
+# Chrome needs writable paths even when --user specifies a UID without a home.
 ENV XDG_CONFIG_HOME=/tmp/.config
 ENV XDG_CACHE_HOME=/tmp/.cache
-# Docker's default restrictions prevent Chromium from creating sandbox namespaces.
-ENV CHROMIUM_USER_FLAGS=--no-sandbox
+ENV XDG_DATA_HOME=/tmp/.local/share
 
-RUN apk add --no-cache \
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
     ca-certificates \
     tzdata \
-    su-exec \
+    gosu \
+    passwd \
     openssl \
     curl \
-    chromium \
     xvfb \
     x11vnc \
     novnc \
-    font-dejavu
+    fonts-dejavu-core && \
+    curl -fsSL https://dl.google.com/linux/linux_signing_key.pub \
+        -o /usr/share/keyrings/google-chrome.asc && \
+    echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/google-chrome.asc] https://dl.google.com/linux/chrome/deb/ stable main" \
+        > /etc/apt/sources.list.d/google-chrome.list && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends google-chrome-stable && \
+    rm -rf /var/lib/apt/lists/*
+
+# Use the container launcher for both explicit selection and browser discovery.
+COPY --chmod=755 chrome-wrapper.sh /usr/local/bin/google-chrome
+RUN ln -sf /usr/local/bin/google-chrome /usr/bin/google-chrome && \
+    ln -sf /usr/local/bin/google-chrome /usr/bin/google-chrome-stable
 
 # Copy binary from build stage
 COPY --chmod=777 --from=downloader /TwitchDropsMiner /TwitchDropsMiner/TwitchDropsMiner
