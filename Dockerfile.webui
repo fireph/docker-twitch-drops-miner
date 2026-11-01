@@ -23,7 +23,7 @@ LABEL org.opencontainers.image.authors="fireph" \
       autoheal=true
 
 # Environment
-ENV TDM_VERSION_TAG=16.dev.6c9254f
+ENV TDM_VERSION_TAG=16.dev.213a9e4
 ENV UI_BACKEND=nicegui
 ENV WEBUI_HOST=0.0.0.0
 ENV WEBUI_BROWSER_PATH=/usr/bin/google-chrome-stable
